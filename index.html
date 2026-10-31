@@ -4,62 +4,158 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="VeraLitis AI — Plataforma SaaS de Pré-Triagem Jurídica Inteligente, Cálculo de Risco Prescricional e Compliance LGPD para Escritórios e PMEs.">
-  <title>VeraLitis AI | Triagem Jurídica Inteligente &amp; Compliance LGPD</title>
+  <title>VeraLitis AI | Admissibilidade Jurídica &amp; Governança LGPD</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+  <!-- FAIXA NORMATIVA FORENSE -->
+  <div class="legal-topbar">
+    <div class="container">
+      <span><strong class="legal-topbar__tag">GOVERNANÇA &amp; ÉTICA:</strong> RESOLUÇÃO CNJ Nº 332/2020 &bull; TPU/CNJ RES. 46/2007 &bull; LGPD LEI 13.709/18</span>
+      <span>ESTATUTO DA OAB (LEI 8.906/94) &bull; SISTEMA VLT-2026-01</span>
+    </div>
+  </div>
+
+  <!-- CABECALHO INSTITUCIONAL (MEMBRO 1) -->
   <header class="site-header">
     <div class="container">
-      <a href="#inicio"><strong>VeraLitis AI</strong></a>
+      <a href="#inicio" class="brand-lockup">
+        <span class="brand-seal" aria-hidden="true">VL</span>
+        <span>
+          <span class="brand-name">VeraLitis AI</span>
+          <span class="brand-sub">Juízo Preliminar &amp; Compliance LGPD</span>
+        </span>
+      </a>
       <nav aria-label="Navegação principal">
         <ul class="nav-list">
-          <li><a href="#inicio">Início</a></li>
-          <li><a href="#simulador">Simulador de Triagem</a></li>
-          <li><a href="#planos">Módulos &amp; Planos</a></li>
-          <li><a href="#contato">Contratar / Demo</a></li>
+          <li><a href="#inicio"><span class="nav-num">§01</span>Início</a></li>
+          <li><a href="#simulador"><span class="nav-num">§02</span>Simulador de Triagem</a></li>
+          <li><a href="#planos"><span class="nav-num">§03</span>Módulos &amp; Planos</a></li>
+          <li><a href="#contato"><span class="nav-num">§04</span>Contratar / Demo</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main>
-    <section id="inicio">
+    <!-- SECAO 1: #inicio (Hero Editorial com Dossie Forense — Membro 1) -->
+    <section id="inicio" class="hero-section">
       <div class="container">
-        <h1>Transforme relatos confusos de clientes em dossiês jurídicos prontos em 30 segundos.</h1>
-        <p>Triagem preliminar com IA, cálculo de risco prescricional, checklist automático de provas e conformidade com a LGPD e diretrizes do CNJ.</p>
-        <p><a href="#simulador" class="btn btn-gold">Testar Simulador de Triagem</a></p>
+        <div class="section-kicker">§ 01 — Juízo de Admissibilidade In Limine &amp; Governança de Dados</div>
+        <div class="hero-grid">
+          <div>
+            <h1>Transforme relatos brutos de clientes em <em>dossiês jurídicos</em> auditáveis em 30 segundos.</h1>
+            <p class="hero-lead">Infraestrutura de pré-triagem para escritórios de advocacia e departamentos jurídicos: aferição de lastro probatório mínimo, alerta de prescrição bienal/quinquenal e checklist documental alinhado às Tabelas Processuais Unificadas (TPU/CNJ).</p>
+            <div class="hero-actions">
+              <a href="#simulador" class="btn btn-gold">Executar Simulador de Caso &rarr;</a>
+              <a href="#planos" class="btn btn-outline-dark">Conhecer Módulos &amp; Planos</a>
+            </div>
+            <div class="metrics-ledger" aria-label="Indicadores técnicos da plataforma">
+              <div class="metrics-ledger__item">
+                <span class="metrics-ledger__val">10 Regras</span>
+                <span class="metrics-ledger__label">Critérios objetivos do CPC Art. 319, CLT e CDC</span>
+              </div>
+              <div class="metrics-ledger__item">
+                <span class="metrics-ledger__val">4 Ramos</span>
+                <span class="metrics-ledger__label">Trabalhista/TRT, Consumidor, Cível e LGPD</span>
+              </div>
+              <div class="metrics-ledger__item">
+                <span class="metrics-ledger__val">100% OAB</span>
+                <span class="metrics-ledger__label">Trava ética sem promessa de resultado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FICHA DE DOSSIE PRELIMINAR AO VIVO -->
+          <aside class="dossier-preview" aria-label="Exemplo de Dossiê de Viabilidade gerado pelo sistema">
+            <div class="dossier-preview__header">
+              <div>
+                <span class="dossier-preview__proto">DOSSIÊ PRELIMINAR &bull; #VLT-2026-0892</span>
+                <h2 class="dossier-preview__title">Reclamação Trabalhista (Horas Extras &amp; FGTS)</h2>
+              </div>
+              <span class="badge badge-verde">Score 85/100 &bull; Maduro</span>
+            </div>
+            <div class="dossier-quote">
+              &ldquo;Trabalhei 2 anos como analista, fazia 2h extras diárias sem registro no holerite e fui dispensado há 4 meses sem depósito integral do FGTS. Tenho CTPS, extratos e conversas.&rdquo;
+            </div>
+            <div class="dossier-meter">
+              <div class="dossier-meter__top">
+                <span>ÍNDICE DE ADMISSIBILIDADE DOCUMENTAL</span>
+                <span>85% (FAIXA VERDE)</span>
+              </div>
+              <div class="dossier-meter__bar">
+                <div class="dossier-meter__fill"></div>
+              </div>
+            </div>
+            <div class="dossier-meta-grid">
+              <div><strong>RAMO / TPU:</strong> Trabalhista (CLT)</div>
+              <div><strong>PRESCRIÇÃO:</strong> Tempestivo (&lt; 24m)</div>
+              <div><strong>BASE LEGAL:</strong> Art. 7º, XXIX CF/88</div>
+              <div><strong>LGPD ART. 6º:</strong> Minimização OK</div>
+            </div>
+            <ul class="dossier-checklist">
+              <li><span>1. CTPS Digital e TRCT Homologado</span><span class="dossier-tag-ok">[VERIFICADO]</span></li>
+              <li><span>2. Extrato Analítico do FGTS (CEF)</span><span class="dossier-tag-ok">[VERIFICADO]</span></li>
+              <li><span>3. Holerites e Espelhos de Ponto</span><span class="dossier-tag-ok">[PENDENTE ENVIO]</span></li>
+            </ul>
+          </aside>
+        </div>
       </div>
     </section>
 
+    <!-- SECAO 2: #simulador (Mini-Produto Integrado — Membro 1: Pedro Henrique) -->
     <section id="simulador">
       <div class="container">
-        <h2>Simulador de Pré-Triagem Jurídica</h2>
-        <p class="text-muted">Triagem operacional preliminar destinada a escritórios — não constitui parecer jurídico vinculante nem substitui a análise do advogado.</p>
+        <div class="section-kicker">§ 02 — Motor Determinístico de Triagem Preliminar (scoring.js)</div>
+        <h2>Simulador de Admissibilidade &amp; Checklist Probatório</h2>
+        <div class="legal-notice-bar">
+          <strong>AVISO DE CONFORMIDADE OAB (LEI Nº 8.906/1994):</strong> Triagem operacional preliminar destinada exclusivamente a escritórios e departamentos jurídicos — não constitui parecer jurídico vinculante nem substitui o juízo técnico do advogado habilitado.
+        </div>
+        <div class="dossier-frame">
+          <p class="text-muted">Espaço reservado para o formulário interativo do simulador, botões de casos de referência, barra de progresso dinâmica, checklist por ramo jurídico e tabela de histórico persistente (localStorage).</p>
+        </div>
       </div>
     </section>
 
+    <!-- SECAO 3: #planos (Cards em CSS Grid e Flexbox — Membro 2: Raimundo Clecio) -->
     <section id="planos">
       <div class="container">
-        <h2>Módulos Técnicos &amp; Planos SaaS</h2>
+        <div class="section-kicker">§ 03 — Arquitetura Modular (CSS Grid) &amp; Planos de Assinatura (Flexbox)</div>
+        <h2>Módulos Técnicos &amp; Planos SaaS para Escritórios</h2>
+        <div class="dossier-frame">
+          <p class="text-muted">Espaço reservado para os 3 cards de módulos técnicos (.cards-grid) e os 3 cards de planos mensais (.cards-flex: Advogado Solo R$ 190/mês, Escritório Pro R$ 590/mês e Corporate Jurídico).</p>
+        </div>
       </div>
     </section>
 
+    <!-- SECAO 4: #contato (Formulario Comercial com Protocolo — Membro 2: Raimundo Clecio) -->
     <section id="contato">
       <div class="container">
+        <div class="section-kicker">§ 04 — Subscrição Institucional &amp; Atendimento Assistido por IA</div>
         <h2>Solicitar Demonstração ou Contratar Plano</h2>
+        <div class="dossier-frame">
+          <p class="text-muted">Espaço reservado para o formulário comercial com cálculo dinâmico de franquia de triagens e emissão de número de protocolo de atendimento.</p>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- WIDGET DA ASSISTENTE VERA (Membro 3: Breno Igo) -->
   <div id="vera-chat-widget" aria-live="polite"></div>
 
   <footer class="site-footer">
-    <div class="container">
-      <p><strong>VeraLitis AI (VLT-2026-01)</strong> — Projeto Unificado AV3 Desenvolvimento Web para IA &amp; Atividade 10 (PIT).</p>
-      <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado.</p>
+    <div class="container site-footer__grid">
+      <div>
+        <p><strong>VeraLitis AI (VLT-2026-01)</strong> — Projeto Unificado: <strong>Desenvolvimento Web para I.A.</strong> &amp; <strong>Ferramentas de I.A. e Chatbots</strong> (PIT).</p>
+        <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994 e Resolução CNJ nº 332/2020).</p>
+      </div>
+      <div class="site-footer__code">
+        BUILD v2.1-EDITORIAL &bull; WCAG AA VERIFIED
+      </div>
     </div>
   </footer>
 
