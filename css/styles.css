@@ -359,12 +359,19 @@ a:hover { color: var(--gold-700); }
   border-bottom: 1px dotted var(--line);
   display: flex;
   justify-content: space-between;
+  gap: var(--space-3);
 }
 .dossier-checklist li:last-child { border-bottom: none; }
 .dossier-tag-ok {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--verde);
+  font-weight: 700;
+}
+.dossier-tag-pend {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--amarelo);
   font-weight: 700;
 }
 
@@ -511,6 +518,7 @@ section + section { border-top: 1px solid var(--line); }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  margin: -1px; padding: 0; border: 0;
 }
 .text-muted { color: var(--muted); }
 
