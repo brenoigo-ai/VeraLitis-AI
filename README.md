@@ -22,7 +22,7 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
 - [x] Contrato inicial da função `analisarCaso()` em `js/scoring.js`
 
 ### ⏳ Em andamento — Etapa 2
-- [ ] Fontes auto-hospedadas (sem requisições ao Google Fonts — Privacy by Design LGPD) — Membro 3
+- [x] Fontes auto-hospedadas (sem requisições ao Google Fonts — Privacy by Design LGPD) — Membro 3
 - [ ] Acessibilidade: foco visível de alto contraste, link "pular para o conteúdo" e âncoras sob o header fixo — Membro 3
 - [ ] Motor `scoring.js` calculando o score e a prescrição a partir das entradas reais + bateria de testes — Membro 1 (Pedro Henrique)
 
@@ -35,7 +35,7 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
 
 ## Tecnologias utilizadas
 - **HTML5 semântico** (header, nav, main, section, aside, footer)
-- **CSS3** com CSS Grid e Flexbox; tipografia Source Serif 4 + Public Sans + JetBrains Mono
+- **CSS3** com CSS Grid e Flexbox; tipografia Source Serif 4 + Public Sans + JetBrains Mono auto-hospedadas
 - **JavaScript (ES6+) vanilla**, sem frameworks
 - *(planejado)* **API de LLM (Node/Express + Gemini SDK / Proxy)** com fallback roteirizado local
 - *(planejado)* **localStorage** para o histórico de triagens e **GitHub Pages** para hospedagem
@@ -57,7 +57,9 @@ O projeto foi desenhado em duas camadas:
 veralitis-ai/
 ├── index.html
 ├── css/
-│   └── styles.css
+│   ├── styles.css
+│   ├── fonts.css
+│   └── fonts/          (woff2 + licenças SIL OFL 1.1)
 ├── js/
 │   ├── main.js
 │   ├── scoring.js
