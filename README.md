@@ -6,9 +6,9 @@ SaaS de pré-triagem de casos jurídicos e compliance LGPD para escritórios de 
 Projeto da disciplina **Desenvolvimento Web para IA (PIT)**, AV3 — integrado à **Atividade 10 (Projeto Integrador)**. Site completo de venda com simulador de triagem jurídica e assistente de IA com persona própria (**VERA**).
 
 ## Integrantes
-- **Membro 1** — Nome completo (@usuario-github)
-- **Membro 2** — Nome completo (@usuario-github)
-- **Membro 3** — Breno Igo Borges Pereira de Araújo (@brenoigo-ai)
+- **Pedro Henrique dos Passos Sousa** — Membro 1
+- **Raimundo Clecio Dantas Muniz Filho** — Membro 2
+- **Breno Igo Borges Pereira de Araújo** (@brenoigo-ai) — Membro 3
 
 ## Tecnologias utilizadas
 - **HTML5 semântico** (header, nav, main, section, footer)
