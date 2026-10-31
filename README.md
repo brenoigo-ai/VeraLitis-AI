@@ -23,7 +23,7 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
 
 ### ⏳ Em andamento — Etapa 2
 - [x] Fontes auto-hospedadas (sem requisições ao Google Fonts — Privacy by Design LGPD) — Membro 3
-- [ ] Acessibilidade: foco visível de alto contraste, link "pular para o conteúdo" e âncoras sob o header fixo — Membro 3
+- [x] Acessibilidade: foco visível de alto contraste, link "pular para o conteúdo" e âncoras sob o header fixo — Membro 3
 - [ ] Motor `scoring.js` calculando o score e a prescrição a partir das entradas reais + bateria de testes — Membro 1 (Pedro Henrique)
 
 ### ⬜ Planejado — próximas etapas
