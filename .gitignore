@@ -1,4 +1,6 @@
 node_modules/
+data/
+pedidos.json
 .env
 .env.*
 !.env.example
