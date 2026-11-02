@@ -14,48 +14,51 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
 
 ## Status do MVP (Roadmap de Implementação)
 
-### ✅ Entregue — Etapa 1 (Kickoff e estrutura)
-- [x] Estrutura de pastas, `.gitignore` e repositório no GitHub
+### ✅ Entregue — Etapa 1 e Frente Membro 3 (Arquitetura, LGPD, A11y e Assistente VERA)
+- [x] Estrutura de pastas, `.gitignore`, `.gitattributes` e repositório no GitHub
 - [x] Design System editorial (tokens de cor, tipografia e espaçamento) em `css/styles.css`
 - [x] HTML semântico com as 4 seções âncora (`#inicio`, `#simulador`, `#planos`, `#contato`)
 - [x] Hero com exemplo estático de dossiê preliminar
-- [x] Contrato inicial da função `analisarCaso()` em `js/scoring.js`
+- [x] Fontes auto-hospedadas em `css/fonts/` (zero requisição ao Google Fonts — Privacy by Design LGPD) — Membro 3
+- [x] Acessibilidade WCAG AA: foco visível de alto contraste, link "pular para o conteúdo" e `scroll-padding-top` — Membro 3
+- [x] Assistente Virtual **VERA** (`persona.js`, `server.js` com Function Calling `registrar_pedido` e widget `js/chat.js` com fallback local para GitHub Pages) — Membro 3
+- [x] Suíte de 15 prompts adversariais e funcionais da VERA documentada em `docs/relatorio-engenharia-prompts.md` — Membro 3
 
-### ⏳ Em andamento — Etapa 2
-- [x] Fontes auto-hospedadas (sem requisições ao Google Fonts — Privacy by Design LGPD) — Membro 3
-- [x] Acessibilidade: foco visível de alto contraste, link "pular para o conteúdo" e âncoras sob o header fixo — Membro 3
+### ⏳ Em andamento — Frentes Membro 1 e Membro 2
 - [ ] Motor `scoring.js` calculando o score e a prescrição a partir das entradas reais + bateria de testes — Membro 1 (Pedro Henrique)
-
-### ⬜ Planejado — próximas etapas
 - [ ] Interface do simulador (`#simulador`: formulário, casos de referência, barra de progresso, checklist e `localStorage`) — Membro 1 (Pedro Henrique)
 - [ ] Cards de módulos (`.cards-grid`) e de planos (`.cards-flex`) na seção `#planos` — Membro 2 (Raimundo Clecio)
 - [ ] Formulário comercial com resumo dinâmico do pedido e protocolo na seção `#contato` — Membro 2 (Raimundo Clecio)
-- [ ] Assistente VERA (`persona.js`, `server.js` e widget `js/chat.js`) com fallback local — Membro 3 (Breno Igo)
-- [ ] Teste de usabilidade e auditoria Lighthouse — Equipe
 
 ## Tecnologias utilizadas
 - **HTML5 semântico** (header, nav, main, section, aside, footer)
 - **CSS3** com CSS Grid e Flexbox; tipografia Source Serif 4 + Public Sans + JetBrains Mono auto-hospedadas
 - **JavaScript (ES6+) vanilla**, sem frameworks
-- *(planejado)* **API de LLM (Node/Express + Gemini SDK / Proxy)** com fallback roteirizado local
-- *(planejado)* **localStorage** para o histórico de triagens e **GitHub Pages** para hospedagem
+- **Node.js + Express + Google GenAI SDK (`@google/genai`)** em `server.js` e `persona.js`, com fallback roteirizado local em `js/chat.js` para funcionamento no GitHub Pages
 
 ## Como executar
 1. Clone o repositório:
    ```bash
    git clone [https://github.com/brenoigo-ai/VeraLitis-AI.git](https://github.com/brenoigo-ai/VeraLitis-AI.git)
    ```
-2. Abra o arquivo `index.html` no navegador (duplo clique) ou sirva com a extensão **Live Server** do VS Code.
-
-## Integração com Inteligência Artificial
-O projeto foi desenhado em duas camadas:
-1. **Motor determinístico (`js/scoring.js`):** pontua o relato do cliente contra 10 critérios objetivos inspirados no CPC (art. 319), na CLT (art. 11), no CDC, na LGPD e nas Tabelas Processuais Unificadas (TPU/CNJ).
-2. **Assistente generativa (VERA — `js/chat.js` / `persona.js`)** *(planejada)*: consultora virtual de pré-triagem e planos SaaS com travas éticas do Estatuto da OAB e Resolução CNJ nº 332/2020.
+2. **Modo Estático (Live Server / GitHub Pages):** Abra `index.html` no navegador. O widget da **VERA** funciona imediatamente com o motor local sincronizado.
+3. **Modo Servidor com Gemini API (Padrão Oficina):**
+   ```bash
+   npm install
+   cp .env.example .env
+   # Insira sua GEMINI_API_KEY no arquivo .env
+   npm start
+   ```
+   Acesse `http://localhost:3000`.
 
 ## Estrutura de pastas
 ```text
 veralitis-ai/
 ├── index.html
+├── persona.js
+├── server.js
+├── package.json
+├── .env.example
 ├── css/
 │   ├── styles.css
 │   ├── fonts.css
@@ -64,12 +67,10 @@ veralitis-ai/
 │   ├── main.js
 │   ├── scoring.js
 │   └── chat.js
-├── assets/
-│   ├── img/
-│   └── icons/
 ├── docs/
 │   └── relatorio-engenharia-prompts.md
 ├── .gitignore
+├── .gitattributes
 └── README.md
 ```
 
@@ -77,9 +78,9 @@ veralitis-ai/
 | Verificação | Status |
 | :--- | :--- |
 | Contraste da paleta de cores (cálculo da razão WCAG) | ✅ Feito — valores em `docs/relatorio-engenharia-prompts.md` |
+| Suíte de 15 prompts adversariais da VERA (OAB, LGPD e Anti-Injection) | ✅ 15/15 aprovados — `docs/relatorio-engenharia-prompts.md` |
 | Bateria de casos do motor `scoring.js` | ⏳ Em andamento (Membro 1) |
-| Suíte de prompts adversariais da VERA | ⬜ Planejado (Membro 3) |
-| Auditoria Lighthouse (acessibilidade ≥ 90) | ⬜ Planejado (Equipe) |
+| Auditoria Lighthouse (acessibilidade ≥ 90) | ⬜ Planejado após conclusão das seções §02, §03 e §04 |
 
 ## Aviso legal
 Ferramenta acadêmica de triagem operacional preliminar desenvolvida para as disciplinas de Desenvolvimento Web para I.A. e Ferramentas de I.A. e Chatbots (PIT). Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994).

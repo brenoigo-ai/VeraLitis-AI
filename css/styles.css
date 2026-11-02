@@ -579,3 +579,164 @@ section + section { border-top: 1px solid var(--line); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+/* ---------- Widget da Assistente Virtual VERA (Membro 3: Breno Igo) ---------- */
+.vera-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy-900);
+  color: var(--paper);
+  border: 2px solid var(--gold-500);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  box-shadow: 4px 4px 0px rgba(5, 13, 26, 0.35);
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+.vera-toggle:hover {
+  background: var(--navy-800);
+}
+.vera-toggle__seal {
+  width: 26px;
+  height: 26px;
+  background: var(--gold-500);
+  color: var(--navy-900);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  display: grid;
+  place-items: center;
+}
+
+.vera-window {
+  position: fixed;
+  right: 20px;
+  bottom: 76px;
+  z-index: 95;
+  width: 370px;
+  max-width: calc(100vw - 32px);
+  height: 500px;
+  max-height: calc(100vh - 110px);
+  background: var(--surface);
+  border: 2px solid var(--navy-900);
+  border-top: 5px solid var(--gold-500);
+  box-shadow: 6px 6px 0px rgba(9, 23, 44, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+.vera-window[hidden] {
+  display: none !important;
+}
+.vera-header {
+  background: var(--navy-900);
+  color: var(--paper);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--gold-500);
+}
+.vera-header__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  color: var(--paper);
+}
+.vera-header__sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--gold-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.vera-close {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: var(--paper);
+  width: 28px;
+  height: 28px;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.vera-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--paper-alt);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.vera-chip {
+  background: var(--surface);
+  border: 1px solid var(--navy-900);
+  color: var(--navy-900);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 4px 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vera-chip:hover {
+  background: var(--gold-100);
+}
+.vera-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.84rem;
+}
+.vera-msg {
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  line-height: 1.45;
+}
+.vera-msg--bot {
+  background: var(--surface);
+  border-left: 3px solid var(--navy-900);
+  align-self: flex-start;
+}
+.vera-msg--user {
+  background: var(--gold-100);
+  border-color: var(--gold-700);
+  align-self: flex-end;
+}
+.vera-msg__author {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--navy-900);
+}
+.vera-input-area {
+  display: flex;
+  border-top: 1.5px solid var(--navy-900);
+  background: var(--surface);
+}
+.vera-input-area input {
+  flex: 1;
+  border: none;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  background: transparent;
+}
+.vera-input-area button {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  border: none;
+  border-left: 1.5px solid var(--navy-900);
+  padding: 0 16px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+.vera-input-area button:hover {
+  background: var(--gold-600);
+}
