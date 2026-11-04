@@ -740,3 +740,36 @@ section + section { border-top: 1px solid var(--line); }
 .vera-input-area button:hover {
   background: var(--gold-600);
 }
+/*---Formulário comercial e Protocolo (Membro 2: Raimundo Clecio---*/
+.form-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+.form-field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-field --full{
+  grid-column:1 / -1;
+}
+.form-field label {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--navy-900);
+}
+.form-field input,
+.form-field select,
+.form field textarea{
+  padding: 10px 12 px;
+  border: 1.5px solid var(--navy-900);
+  background: var(--verde-bg);
+  border: 1.5px solid var(--verde);
+  border-left: 5px solid var(--verde);
+}
+@media(max-width: 640px){
+  .form-grid{grid-template-columns: 1fr;}
+}

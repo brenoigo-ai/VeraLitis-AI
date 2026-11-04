@@ -203,8 +203,41 @@
       <div class="container">
         <div class="section-kicker">§ 04 — Subscrição Institucional &amp; Atendimento Assistido por IA</div>
         <h2>Solicitar Demonstração ou Contratar Plano</h2>
+        <p class="text-muted"> Preencha os dados institucionais do seu escritório para simular a franquia ideal e emitir o protocolo imediato de atendimento.</p>
         <div class="dossier-frame">
-          <p class="text-muted">Espaço reservado para o formulário comercial com cálculo dinâmico de franquia de triagens e emissão de número de protocolo de atendimento.</p>
+          <from id="form-contato" class="form-grid" novalidate>
+            <div class="form-field">
+              <label for="contato-nome">Nome do Advogado ou Escritório *</label>
+              <input type="text" id="contato-nome" nome="nome" required placeholder="Ex.: Muniz &amp; Associados Advocacia"/>
+            </div>
+            <div class="form-field">
+              <label for="contato-registro">Registro OAB/UF ou CNPJ *</label>
+              <input type="text" id="contato-registro" nome="registro" required placeholder="Ex.: OAB/PI 12.345 ou CNPJ" />
+            </div>
+            <div class="form-field">
+              <label for="contato-email">E-mail Comercial *</label>
+              <input type="email" id="contato-email" nome="email" required placeholder="contato@escritorio.adv.br"/>
+            </div>
+            <div class="form-field">
+              <label for="contato-plano">Plano SaaS Desejado *</label>
+              <select id="contato-nome" nome="plano" required>
+                <option value="solo"> Advogado Solo - R$ 190/mês (Até 80 triagens)</option>
+                <option value="pro" selected> Escritório Pro - R$ 590/mês (Até 400 triagens)</option>
+                <option value="corporate">Corporate Jurídico - R$ 1.490/mês (Ilimitado)</option>
+              </select> 
+            </div>
+            <div class="form-field">
+              <label for="contato-volume">Volum Estimado de Triagens/Mês *</label>
+              <input type="number" id="contato-volume" name="volume" min="1" max="5000" value="120" required />
+            </div>
+            <div class="form-field">
+              <label for="contato-modalidade">Modalidade de Solicitação *</label>
+              <selected id="contato-modalidade" nome="modalidade">
+                <option value="Demonstração Guiada (7 dias)">Demonstração Guiada Gratuita (7 dias)</option>
+                <option value="Contratação Imediata (PIX/Boleto)">Contratação Imediata (PIX/Boleto CNPJ)</option> 
+              </selected>
+            </div>
+          </from>
         </div>
       </div>
     </section>
