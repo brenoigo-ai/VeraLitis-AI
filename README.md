@@ -22,7 +22,7 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
 - [x] Fontes auto-hospedadas em `css/fonts/` (zero requisição ao Google Fonts — Privacy by Design LGPD) — Membro 3
 - [x] Acessibilidade WCAG AA: foco visível de alto contraste, link "pular para o conteúdo" e `scroll-padding-top` — Membro 3
 - [x] Assistente Virtual **VERA** (`persona.js`, `server.js` com Function Calling `registrar_pedido` e widget `js/chat.js` com fallback local para GitHub Pages) — Membro 3
-- [x] Suíte de 15 prompts adversariais e funcionais da VERA documentada em `docs/relatorio-engenharia-prompts.md` — Membro 3
+- [x] Suíte automatizada de 21 verificações da VERA (`tests/vera.test.html`) e relatório em `docs/relatorio-engenharia-prompts.md` — Membro 3
 
 ### ⏳ Em andamento — Frentes Membro 1 e Membro 2
 - [ ] Motor `scoring.js` calculando o score e a prescrição a partir das entradas reais + bateria de testes — Membro 1 (Pedro Henrique)
@@ -41,7 +41,7 @@ Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Fe
    ```bash
    git clone [https://github.com/brenoigo-ai/VeraLitis-AI.git](https://github.com/brenoigo-ai/VeraLitis-AI.git)
    ```
-2. **Modo Estático (Live Server / GitHub Pages):** Abra `index.html` no navegador. O widget da **VERA** funciona imediatamente com o motor local sincronizado.
+2. **Modo Estático (Live Server / GitHub Pages):** Abra `index.html` no navegador. O widget da **VERA** funciona imediatamente com o motor local determinístico por tabela de intenções.
 3. **Modo Servidor com Gemini API (Padrão Oficina):**
    ```bash
    npm install
@@ -78,7 +78,7 @@ veralitis-ai/
 | Verificação | Status |
 | :--- | :--- |
 | Contraste da paleta de cores (cálculo da razão WCAG) | ✅ Feito — valores em `docs/relatorio-engenharia-prompts.md` |
-| Suíte de 15 prompts adversariais da VERA (OAB, LGPD e Anti-Injection) | ✅ 15/15 aprovados — `docs/relatorio-engenharia-prompts.md` |
+| Suíte automatizada da VERA (`tests/vera.test.html` — OAB, LGPD e Anti-Injection) | ✅ 21/21 verificações aprovadas |
 | Bateria de casos do motor `scoring.js` | ⏳ Em andamento (Membro 1) |
 | Auditoria Lighthouse (acessibilidade ≥ 90) | ⬜ Planejado após conclusão das seções §02, §03 e §04 |
 
