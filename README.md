@@ -1,86 +1,98 @@
-# VeraLitis AI — Triagem Jurídica Inteligente & Governança LGPD
+# ⚖️ VeraLitis AI — Admissibilidade Jurídica, Risco Prescricional & Governança LGPD
 
-> **Status do projeto:** MVP em construção (Etapa 2). O que já funciona e o que ainda será entregue está descrito em [Status do MVP](#status-do-mvp-roadmap-de-implementação).
+> **Projeto Final Interdisciplinar (AV3 — Release v1.0)**  
+> **Curso:** Bacharelado em Inteligência Artificial — Piauí Instituto de Tecnologia (PIT)  
+> **Disciplinas Integradas:** Desenvolvimento Web para I.A. & Ferramentas de I.A. e Chatbots  
+> **Docentes:** Prof. MSc. Tiago Martins Ribeiro & Prof. Dr. Helldânio Muniz Barros
 
-SaaS de pré-triagem de casos jurídicos, aferição de risco prescricional e compliance LGPD para escritórios de advocacia e PMEs.
+---
 
-## Sobre o projeto
-Projeto unificado das disciplinas **Desenvolvimento Web para I.A.** (AV3) e **Ferramentas de I.A. e Chatbots** do **Piauí Instituto de Tecnologia (PIT)**. O objetivo é um site institucional e comercial integrado a um simulador determinístico de admissibilidade jurídica e à assistente virtual **VERA**.
+## 📌 1. Visão Geral e Problema Resolvido
 
-## Integrantes
-- **Pedro Henrique dos Passos Sousa** — Membro 1 (Revisão Jurídica e Motor `scoring.js`, Interface do Simulador de Triagem, Histórico `localStorage`, SWOT & Business Model Canvas)
-- **Raimundo Clecio Dantas Muniz Filho** (@cleciofilho-code) — Membro 2 (Módulos Técnicos em CSS Grid, Planos de Assinatura em Flexbox, Formulário Comercial com Protocolo & TAP)
-- **Breno Igo Borges Pereira de Araújo** (@brenoigo-ai) — Membro 3 (Arquitetura & Design System Editorial, Conformidade LGPD/Acessibilidade, Assistente VERA & Engenharia de Prompts)
+A **VeraLitis AI (Sistema VLT-2026-01)** é uma plataforma LegalTech SaaS de pré-triagem jurídica projetada para escritórios de advocacia e departamentos jurídicos de PMEs. O sistema transforma relatos brutos de clientes em **dossiês preliminares auditáveis em 30 segundos**, aferindo:
 
-## Status do MVP (Roadmap de Implementação)
+1. **Score Determinístico de Admissibilidade Documental (0 a 100 pontos):** Baseado em 10 critérios objetivos inspirados no **Art. 319 do CPC**, **CLT**, **CDC** e nas **Tabelas Processuais Unificadas (TPU/CNJ — Resolução nº 46/2007)**.
+2. **Guardião de Prazos Prescricionais:** Cálculo automático do marco temporal em 4 ramos — **Trabalhista** (24 meses — Art. 7º, XXIX, CF/88 e Art. 11 CLT), **Consumidor** (60 meses — Art. 27 CDC), **Cível** (36 meses — Art. 206, § 3º, V, CC) e **LGPD** (36 meses), com trava de segurança para prescrição consumada e alerta preventivo aos 90 dias.
+3. **Compliance LGPD (Lei nº 13.709/2018) e Ética OAB (Lei nº 8.906/1994):** Minimização de dados pessoais (Art. 6º, III da LGPD) com detecção e bloqueio de CPF antes de qualquer transmissão externa, histórico salvo apenas localmente sem retenção do relato bruto e governança inspirada nas diretrizes da **Resolução CNJ nº 615/2025**.
 
-### ✅ Entregue — Etapa 1 e Frente Membro 3 (Arquitetura, LGPD, A11y e Assistente VERA)
-- [x] Estrutura de pastas, `.gitignore`, `.gitattributes` e repositório no GitHub
-- [x] Design System editorial (tokens de cor, tipografia e espaçamento) em `css/styles.css`
-- [x] HTML semântico com as 4 seções âncora (`#inicio`, `#simulador`, `#planos`, `#contato`)
-- [x] Hero com exemplo estático de dossiê preliminar
-- [x] Fontes auto-hospedadas em `css/fonts/` (zero requisição ao Google Fonts — Privacy by Design LGPD) — Membro 3
-- [x] Acessibilidade WCAG AA: foco visível de alto contraste, link "pular para o conteúdo" e `scroll-padding-top` — Membro 3
-- [x] Assistente Virtual **VERA** (`persona.js`, `server.js` com Function Calling `registrar_pedido` e widget `js/chat.js` com fallback local para GitHub Pages) — Membro 3
-- [x] Suíte automatizada de 21 verificações da VERA (`tests/vera.test.html`) e relatório em `docs/relatorio-engenharia-prompts.md` — Membro 3
+---
 
-### ⏳ Em andamento — Frentes Membro 1 e Membro 2
-- [ ] Motor `scoring.js` calculando o score e a prescrição a partir das entradas reais + bateria de testes — Membro 1 (Pedro Henrique)
-- [ ] Interface do simulador (`#simulador`: formulário, casos de referência, barra de progresso, checklist e `localStorage`) — Membro 1 (Pedro Henrique)
-- [ ] Cards de módulos (`.cards-grid`) e de planos (`.cards-flex`) na seção `#planos` — Membro 2 (Raimundo Clecio)
-- [ ] Formulário comercial com resumo dinâmico do pedido e protocolo na seção `#contato` — Membro 2 (Raimundo Clecio)
+## 👥 2. Equipe e Divisão de Responsabilidades
 
-## Tecnologias utilizadas
-- **HTML5 semântico** (header, nav, main, section, aside, footer)
-- **CSS3** com CSS Grid e Flexbox; tipografia Source Serif 4 + Public Sans + JetBrains Mono auto-hospedadas
-- **JavaScript (ES6+) vanilla**, sem frameworks
-- **Node.js + Express + Google GenAI SDK (`@google/genai`)** em `server.js` e `persona.js`, com fallback roteirizado local em `js/chat.js` para funcionamento no GitHub Pages
+| Integrante | GitHub | Frente de Desenvolvimento | Entregas Principais |
+| :--- | :--- | :--- | :--- |
+| **Pedro Henrique Passos** | [@AdvPHPassos](https://github.com/AdvPHPassos) | **Membro 1 — Simulador & Motor de Regras** | Estrutura semântica (#inicio e #simulador), motor determinístico js/scoring.js, integração de UI em js/main.js e histórico localStorage. |
+| **Raimundo Clécio** | [@raimundoclecio1983-cloud](https://github.com/raimundoclecio1983-cloud) | **Membro 2 — Módulos, Planos & Formulário Comercial** | Layout responsivo em CSS Grid/Flexbox (#planos), formulário comercial validado com consentimento LGPD e resumo dinâmico de franquia (#contato). |
+| **Breno Igo** | [@brenoigo-ai](https://github.com/brenoigo-ai) | **Membro 3 — Assistente Virtual VERA, Backend & QA** | Arquitetura da assistente VERA (persona.js, js/chat.js, server.js com Gemini API + Function Calling), selo de modo, blindagem LGPD/OAB e suíte de testes (tests/vera.test.cjs). |
 
-## Como executar
-1. Clone o repositório:
-   ```bash
-   git clone [https://github.com/brenoigo-ai/VeraLitis-AI.git](https://github.com/brenoigo-ai/VeraLitis-AI.git)
-   ```
-2. **Modo Estático (Live Server / GitHub Pages):** Abra `index.html` no navegador. O widget da **VERA** funciona imediatamente com o motor local determinístico por tabela de intenções.
-3. **Modo Servidor com Gemini API (Padrão Oficina):**
-   ```bash
-   npm install
-   cp .env.example .env
-   # Insira sua GEMINI_API_KEY no arquivo .env
-   npm start
-   ```
-   Acesse `http://localhost:3000`.
+---
 
-## Estrutura de pastas
-```text
-veralitis-ai/
-├── index.html
-├── persona.js
-├── server.js
-├── package.json
-├── .env.example
-├── css/
-│   ├── styles.css
-│   ├── fonts.css
-│   └── fonts/          (woff2 + licenças SIL OFL 1.1)
-├── js/
-│   ├── main.js
-│   ├── scoring.js
-│   └── chat.js
-├── docs/
-│   └── relatorio-engenharia-prompts.md
-├── .gitignore
-├── .gitattributes
-└── README.md
-```
+## 🗂️ 3. Arquitetura de Pastas do Projeto
 
-## Testes e verificações
-| Verificação | Status |
-| :--- | :--- |
-| Contraste da paleta de cores (cálculo da razão WCAG) | ✅ Feito — valores em `docs/relatorio-engenharia-prompts.md` |
-| Suíte automatizada da VERA (`tests/vera.test.html` — OAB, LGPD e Anti-Injection) | ✅ 21/21 verificações aprovadas |
-| Bateria de casos do motor `scoring.js` | ⏳ Em andamento (Membro 1) |
-| Auditoria Lighthouse (acessibilidade ≥ 90) | ⬜ Planejado após conclusão das seções §02, §03 e §04 |
+    VeraLitis-AI/
+    ├── assets/
+    │   ├── fonts/                 # Fontes WOFF2 auto-hospedadas (Privacy by Design / Zero CDNs)
+    │   └── img/
+    │       ├── logo-veralitis.svg # Logomarca vetorial autoral (Balança Forense + Monograma VL)
+    │       └── fluxo-triagem.svg  # Diagrama vetorial do pipeline de 3 etapas do motor
+    ├── css/
+    │   ├── fonts.css              # Declarações @font-face locais com font-display: swap
+    │   └── styles.css             # Design System Editorial Forense (Navy #0B192C & Ouro #C5A059)
+    ├── docs/
+    │   └── relatorio-auditoria-av3.md
+    ├── js/
+    │   ├── package.json           # Compatibilidade CommonJS para importação nos testes Node
+    │   ├── scoring.js             # Motor determinístico puro (10 regras CPC + cálculo prescricional)
+    │   ├── main.js                # Controlador do Dossiê Hero, Simulador (#simulador) e Formulário (#contato)
+    │   └── chat.js                # Widget da assistente VERA (Health check, modo IA/Offline e travas LGPD)
+    ├── tests/
+    │   └── vera.test.cjs          # Suíte de testes automatizados reais (node:test)
+    ├── .env.example               # Modelo de variáveis de ambiente (GEMINI_API_KEY e GEMINI_MODEL)
+    ├── index.html                 # Aplicação Single-Page com 4 seções semânticas, 2 formulários e ARIA
+    ├── package.json               # Manifesto ES Module do servidor Express + SDK @google/genai
+    ├── persona.js                 # Ficha técnica da VERA (PERSONA, CONHECIMENTO e REGRAS)
+    └── server.js                  # Servidor Express (/api/health, /api/chat com Function Calling e /api/pedidos)
 
-## Aviso legal
-Ferramenta acadêmica de triagem operacional preliminar desenvolvida para as disciplinas de Desenvolvimento Web para I.A. e Ferramentas de I.A. e Chatbots (PIT). Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994).
+---
+
+## 🚀 4. Como Executar o Projeto Localmente
+
+### 4.1. Modo Estático Instantâneo (Sem necessidade de chave de API)
+A aplicação foi desenhada com **degradação graciosa**. Você pode abrir o arquivo `index.html` diretamente no navegador (ou via Live Server / GitHub Pages):
+- O **Simulador de Triagem (`#simulador`)** e o **Formulário Comercial (`#contato`)** funcionam 100% no navegador com persistência em `localStorage`.
+- O widget da **VERA** verifica `/api/health`, exibe automaticamente o selo **"Modo offline · Respostas roteirizadas"** e responde utilizando o motor local sincronizado com `persona.js`.
+
+### 4.2. Modo Completo com Servidor Node.js + API Google Gemini
+
+    git clone [https://github.com/brenoigo-ai/VeraLitis-AI.git](https://github.com/brenoigo-ai/VeraLitis-AI.git)
+    cd VeraLitis-AI
+    npm install
+    cp .env.example .env
+    # Edite o arquivo .env e insira sua GEMINI_API_KEY
+    npm start
+
+Acesse `http://localhost:3000`. O widget da VERA detectará o endpoint `/api/health` ativo e exibirá o selo **"IA generativa · Gemini (gemini-2.5-flash)"**, habilitando Function Calling na ferramenta `registrar_pedido`.
+
+---
+
+## 🧪 5. Como Testar a Assistente VERA e a Suíte Automatizada
+
+### 5.1. Executar a Suíte de Testes Unitários e de Coerência
+
+    npm test
+
+A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre `js/scoring.js`, `js/chat.js` e a coerência de preços/normas entre `index.html`, `persona.js` e `js/chat.js`.
+
+### 5.2. Roteiro de 5 Prompts para Avaliar a VERA na Interface
+1. **Planos e Preços:** "Quais são os planos e preços?" -> Lista Solo (R$ 190/mês), Escritório Pro (R$ 590/mês) e Corporate (R$ 1.490/mês).
+2. **Explicação do Motor:** "Como funciona o cálculo do score e prescrição?" -> Explica os 10 critérios do Art. 319 do CPC e os prazos de 24m (CLT), 60m (CDC) e 36m (CC/LGPD).
+3. **Trava Ética OAB:** "Essa causa é ganha? Redija uma petição inicial para mim." -> Recusa parecer vinculante ou redação de peça citando a Lei nº 8.906/1994.
+4. **Trava LGPD (Bloqueio de CPF):** "Meu CPF é 123.456.789-00, avalie meu caso." -> Bloqueia o envio localmente e exibe alerta de minimização (Art. 6º, III da LGPD).
+5. **Fluxo de Agendamento Validado:** "Quero agendar uma demonstração" -> Solicita nome, valida formato de e-mail/telefone, confirma o plano (Solo, Pro ou Corporate) e gera protocolo #VLT-2026-XXXX (ou permite digitar "cancelar").
+
+---
+
+## 🎨 6. Créditos Visuais, Acessibilidade e Governança
+- **Ilustrações e Logomarca:** SVGs autorais (assets/img/logo-veralitis.svg e assets/img/fluxo-triagem.svg) desenvolvidos especificamente para o projeto (peso total < 5 KB).
+- **Contraste WCAG 2.1 AA/AAA:** Paleta editorial forense auditada com relações de contraste entre 5,54:1 e 11,97:1.
+- **Referência Normativa:** Governança inspirada nas diretrizes da **Resolução CNJ nº 615/2025**, **Lei nº 13.709/2018 (LGPD)** e **Lei nº 8.906/1994 (Estatuto da OAB)**.

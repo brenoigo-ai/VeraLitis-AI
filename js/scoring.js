@@ -139,7 +139,7 @@ function classificarFaixa(score, alertaPrescricao, prescrito) {
  */
 function analisarCaso(entrada, hoje) {
   const dados = entrada || {};
-  const ramo = String(dados.ramo || "").toLowerCase();
+  const ramo = normalizarTexto(dados.ramo).trim();
 
   if (!PRAZOS_PRESCRICIONAIS[ramo]) {
     return { erro: "Ramo jurídico inválido: informe trabalhista, consumidor, civel ou lgpd." };
@@ -191,3 +191,4 @@ function analisarCaso(entrada, hoje) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { analisarCaso, classificarFaixa, calcularPrescricao, contarPalavras, normalizarTexto, detectarDadosPessoais, somarMeses, interpretarData, CHECKLISTS_POR_AREA, PRAZOS_PRESCRICIONAIS };
 }
+

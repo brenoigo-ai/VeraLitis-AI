@@ -4,27 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="VeraLitis AI — Plataforma SaaS de Pré-Triagem Jurídica Inteligente, Cálculo de Risco Prescricional e Compliance LGPD para Escritórios e PMEs.">
+  <meta name="theme-color" content="#0B192C">
+  <meta property="og:title" content="VeraLitis AI | Admissibilidade Jurídica & Governança LGPD">
+  <meta property="og:description" content="Transforme relatos brutos de clientes em dossiês jurídicos auditáveis em 30 segundos.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/logo-veralitis.svg">
   <title>VeraLitis AI | Admissibilidade Jurídica &amp; Governança LGPD</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/logo-veralitis.svg">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
   <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
-
-  <!-- FAIXA NORMATIVA FORENSE -->
-  <div class="legal-topbar">
-    <div class="container">
-      <span><strong class="legal-topbar__tag">GOVERNANÇA &amp; ÉTICA:</strong> RESOLUÇÃO CNJ Nº 332/2020 &bull; TPU/CNJ RES. 46/2007 &bull; LGPD LEI 13.709/18</span>
-      <span>ESTATUTO DA OAB (LEI 8.906/94) &bull; SISTEMA VLT-2026-01</span>
-    </div>
   </div>
 
   <!-- CABECALHO INSTITUCIONAL (MEMBRO 1) -->
   <header class="site-header">
     <div class="container">
       <a href="#inicio" class="brand-lockup">
-        <span class="brand-seal" aria-hidden="true">VL</span>
+        <img src="assets/img/logo-veralitis.svg" alt="Logomarca VeraLitis AI" width="42" height="42" class="brand-logo-img">
         <span>
           <span class="brand-name">VeraLitis AI</span>
           <span class="brand-sub">Juízo Preliminar &amp; Compliance LGPD</span>
@@ -32,10 +31,10 @@
       </a>
       <nav aria-label="Navegação principal">
         <ul class="nav-list">
-          <li><a href="#inicio"><span class="nav-num">§01</span>Início</a></li>
-          <li><a href="#simulador"><span class="nav-num">§02</span>Simulador de Triagem</a></li>
-          <li><a href="#planos"><span class="nav-num">§03</span>Módulos &amp; Planos</a></li>
-          <li><a href="#contato"><span class="nav-num">§04</span>Contratar / Demo</a></li>
+          <li><a href="#inicio"><span class="nav-num" aria-hidden="true">§01</span>Início</a></li>
+          <li><a href="#simulador"><span class="nav-num" aria-hidden="true">§02</span>Simulador de Triagem</a></li>
+          <li><a href="#planos"><span class="nav-num" aria-hidden="true">§03</span>Módulos &amp; Planos</a></li>
+          <li><a href="#contato"><span class="nav-num" aria-hidden="true">§04</span>Contratar / Demo</a></li>
         </ul>
       </nav>
     </div>
@@ -45,6 +44,7 @@
     <!-- SECAO 1: #inicio (Hero Editorial com Dossie Forense — Membro 1) -->
     <section id="inicio" class="hero-section">
       <div class="container">
+        <div style="margin-bottom: 22px;"><img src="assets/img/hero-banner.svg" alt="Banner Institucional VeraLitis AI — Juízo Preliminar de Admissibilidade e Governança Probatória" width="1120" height="180" style="width: 100%; height: auto; border-radius: 12px; display: block; box-shadow: 0 10px 24px rgba(11,25,44,0.14);"></div>
         <div class="section-kicker">§ 01 — Pré-Triagem Jurídica &amp; Governança de Dados</div>
         <div class="hero-grid">
           <div>
@@ -77,27 +77,27 @@
                 <span class="dossier-preview__proto">DOSSIÊ PRELIMINAR &bull; #VLT-2026-0892</span>
                 <h2 class="dossier-preview__title">Reclamação Trabalhista (Horas Extras &amp; FGTS)</h2>
               </div>
-              <span class="badge badge-verde">Score 85/100 &bull; Maduro</span>
+              <span class="badge badge-verde" id="hero-dossier-badge">Score 85/100 &bull; Maduro</span>
             </div>
-            <div class="dossier-quote">
+            <div class="dossier-quote" id="hero-dossier-quote">
               &ldquo;Trabalhei 2 anos como analista, fazia 2h extras diárias sem registro no holerite e fui dispensado há 4 meses sem depósito integral do FGTS. Tenho CTPS, extratos e conversas.&rdquo;
             </div>
             <div class="dossier-meter">
               <div class="dossier-meter__top">
                 <span>ÍNDICE DE ADMISSIBILIDADE DOCUMENTAL</span>
-                <span>85% (FAIXA VERDE)</span>
+                <span id="hero-dossier-pct">85% (FAIXA VERDE)</span>
               </div>
               <div class="dossier-meter__bar">
-                <div class="dossier-meter__fill"></div>
+                <div class="dossier-meter__fill" id="hero-dossier-fill"></div>
               </div>
             </div>
             <div class="dossier-meta-grid">
-              <div><strong>RAMO / TPU:</strong> Trabalhista (CLT)</div>
-              <div><strong>PRESCRIÇÃO:</strong> Tempestivo (&lt; 24m)</div>
-              <div><strong>BASE LEGAL:</strong> Art. 7º, XXIX CF/88</div>
-              <div><strong>LGPD ART. 6º:</strong> Minimização OK</div>
+              <div><strong>RAMO / TPU:</strong> <span id="hero-dossier-ramo">Trabalhista (CLT)</span></div>
+              <div><strong>PRESCRIÇÃO:</strong> <span id="hero-dossier-presc">Tempestivo (&lt; 24m)</span></div>
+              <div><strong>BASE LEGAL:</strong> <span id="hero-dossier-base">Art. 7º, XXIX CF/88</span></div>
+              <div><strong>LGPD ART. 6º:</strong> <span id="hero-dossier-lgpd">Minimização OK</span></div>
             </div>
-            <ul class="dossier-checklist">
+            <ul class="dossier-checklist" id="hero-dossier-checklist">
               <li><span>1. CTPS Digital e TRCT</span><span class="dossier-tag-ok">[VERIFICADO]</span></li>
               <li><span>2. Extrato Analítico do FGTS (CEF)</span><span class="dossier-tag-ok">[VERIFICADO]</span></li>
               <li><span>3. Holerites e Espelhos de Ponto</span><span class="dossier-tag-pend">[PENDENTE ENVIO]</span></li>
@@ -115,8 +115,104 @@
         <div class="legal-notice-bar">
           <strong>AVISO DE CONFORMIDADE OAB (LEI Nº 8.906/1994):</strong> Triagem operacional preliminar destinada exclusivamente a escritórios e departamentos jurídicos — não constitui parecer jurídico vinculante nem substitui o juízo técnico do advogado habilitado.
         </div>
+
         <div class="dossier-frame">
-          <p class="text-muted">Espaço reservado para o formulário interativo do simulador, botões de casos de referência, barra de progresso dinâmica, checklist por ramo jurídico e tabela de histórico persistente (localStorage).</p>
+          <div style="margin-bottom: 18px;">
+            <strong style="display: block; margin-bottom: 8px;">Casos de Referência para Teste Rápido (1 clique):</strong>
+            <div class="hero-actions" style="margin-top: 8px;">
+              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="trabalhista">Caso 1: Trabalhista Maduro (Faixa Verde)</button>
+              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="consumidor">Caso 2: Consumidor c/ Pendência (Amarelo)</button>
+              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="prescrito">Caso 3: Prescrição Consumada (Vermelho)</button>
+              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="lgpd">Caso 4: Incidente LGPD c/ CPF no Relato</button>
+            </div>
+          </div>
+
+          <form id="form-simulador" class="form-grid" novalidate>
+            <div class="form-field">
+              <label for="sim-ramo">Ramo Jurídico (TPU/CNJ) *</label>
+              <select id="sim-ramo" name="ramo" required>
+                <option value="trabalhista">Direito do Trabalho (CLT — Prescrição Bienal 24m)</option>
+                <option value="consumidor">Direito do Consumidor (CDC — Prescrição Quinquenal 60m)</option>
+                <option value="civel">Direito Civil / Contratos (CC — Prescrição Trienal 36m)</option>
+                <option value="lgpd">Proteção de Dados / LGPD (Lei 13.709/18 — 36m)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="sim-data">Data do Fato Gerador ou Rescisão *</label>
+              <input type="date" id="sim-data" name="dataFato" required>
+            </div>
+
+            <div class="form-field" style="grid-column: 1 / -1;">
+              <label for="sim-relato">Relato Objetivo dos Fatos (mínimo de 25 palavras — evite CPF/telefone) *</label>
+              <textarea id="sim-relato" name="relato" rows="4" required placeholder="Descreva o ocorrido, vínculo ou contrato, descumprimento alegado e documentos existentes..."></textarea>
+              <small id="sim-contador-palavras" class="text-muted">0 palavras digitadas (mínimo recomendado: 25 palavras).</small>
+            </div>
+
+            <fieldset style="grid-column: 1 / -1; border: 1px solid var(--border, #cbd5e1); padding: 14px; border-radius: 8px;">
+              <legend style="font-weight: 700; padding: 0 6px;">Verificação de Requisitos Probatórios (CPC, Art. 319)</legend>
+              <div class="cards-grid" style="margin-top: 8px;">
+                <label><input type="checkbox" id="chk-provas" checked> Possui prova documental mínima (contrato, CTPS, nota, prints)</label>
+                <label><input type="checkbox" id="chk-re" checked> Parte ré identificada (CNPJ/Razão Social ou empregador)</label>
+                <label><input type="checkbox" id="chk-pedido" checked> Pretensão / pedido principal delimitado</label>
+                <label><input type="checkbox" id="chk-tentativa"> Tentativa prévia de solução (SAC, protocolo, notificação)</label>
+                <label><input type="checkbox" id="chk-valor"> Valor estimado da causa ou extensão do dano apurável</label>
+              </div>
+            </fieldset>
+
+            <div class="hero-actions" style="grid-column: 1 / -1; margin-top: 8px;">
+              <button type="submit" class="btn btn-gold">Analisar Viabilidade &amp; Gerar Dossiê</button>
+              <button type="reset" id="btn-limpar-simulador" class="btn btn-outline-dark">Limpar Campos</button>
+            </div>
+          </form>
+
+          <!-- RESULTADO DO SIMULADOR -->
+          <div id="sim-resultado" aria-live="polite" style="margin-top: 24px;" hidden>
+            <div class="dossier-preview">
+              <div class="dossier-preview__header">
+                <div>
+                  <span class="dossier-preview__proto" id="res-protocolo">DOSSIÊ GERADO AO VIVO</span>
+                  <h3 class="dossier-preview__title" id="res-titulo">Resultado da Análise Preliminar</h3>
+                </div>
+                <span class="badge badge-verde" id="res-badge">Score 0/100</span>
+              </div>
+              <div id="res-alerta-critico" hidden style="margin: 12px 0; padding: 12px 16px; border-radius: 8px; font-weight: 700; font-size: 0.95rem;"></div>
+              <p id="res-mensagem" style="margin: 12px 0; font-weight: 600;"></p>
+              <div class="dossier-meter">
+                <div class="dossier-meter__top">
+                  <span>PONTUAÇÃO DE ADMISSIBILIDADE</span>
+                  <span id="res-barra-texto">0%</span>
+                </div>
+                <div class="dossier-meter__bar">
+                  <div class="dossier-meter__fill" id="res-barra-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="dossier-meta-grid" style="margin-top: 12px;">
+                <div><strong>PRAZO LEGAL:</strong> <span id="res-prescricao">—</span></div>
+                <div><strong>FUNDAMENTO:</strong> <span id="res-base-legal">—</span></div>
+                <div><strong>FILTRO LGPD:</strong> <span id="res-lgpd">—</span></div>
+              </div>
+              <div class="cards-grid" style="margin-top: 16px;">
+                <div>
+                  <h4 style="margin-bottom: 8px;">Checklist Documental Exigido (TPU/CNJ)</h4>
+                  <ul class="dossier-checklist" id="res-checklist"></ul>
+                </div>
+                <div>
+                  <h4 style="margin-bottom: 8px;">Auditoria dos 10 Critérios (Art. 319 CPC)</h4>
+                  <ul class="dossier-checklist" id="res-criterios"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HISTORICO LOCALSTORAGE -->
+          <div style="margin-top: 28px; border-top: 1px solid #e2e8f0; padding-top: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <h3 style="margin: 0; font-size: 1.05rem;">Histórico Local de Triagens Recentes (Sem retenção do relato bruto — LGPD)</h3>
+              <button type="button" id="btn-limpar-historico" class="btn btn-outline-dark" style="padding: 6px 12px; font-size: 0.85rem;">Limpar Histórico</button>
+            </div>
+            <ul class="dossier-checklist" id="sim-historico-lista" style="margin-top: 12px;"></ul>
+          </div>
         </div>
       </div>
     </section>
@@ -127,39 +223,47 @@
         <div class="section-kicker">§ 03 — Módulos Técnicos &amp; Planos de Assinatura</div>
         <h2>Módulos Técnicos &amp; Planos SaaS para Escritórios</h2>
         <p class="text-muted">Arquitetura modular desenhada para padronizar a admissibilidade documental, blindar prazos prescricionais e garantir conformidade com a LGPD.</p>
+
+        <div style="margin: 20px 0;">
+          <img src="assets/img/fluxo-triagem.svg" alt="Diagrama em três etapas do motor VeraLitis AI: Relato Bruto, Motor de 10 Regras do CPC e Dossiê Auditável" width="720" height="140" loading="lazy" style="max-width: 100%; height: auto; border-radius: 10px;">
+        </div>
+
         <h3 style="margin-top: 24px; margin-bottom: 16px;">1. Módulos de Inteligência Forense (Arquitetura CSS Grid)</h3>
         <div class="cards-grid">
-          <article class="cards">
-            <spam class="badge badge-verde">MODULO 01 &bull; MOTOR TPU/CNJ</spam>
+          <article class="card">
+            <span class="badge badge-verde">MÓDULO 01 &bull; MOTOR TPU/CNJ</span>
             <h3 style="margin-top: 12px;">Triagem Determinística Auditável</h3>
             <p>Aferição objetiva de 10 critérios inspirados no art. 319 do CPC, classificando o relato do cliente em faixas Verde, Amarela ou Vermelha sem alucinação.</p>
             <ul class="dossier-checklist">
-              <li><span>Score de 0 a 100 pontos</span><span class="dossier-tag-ok"> [ATIVO]</span></li>
-              <li><span>Checklist probatório por área</span><span class="dossiertag-ok">[ATIVO]</span></li>
+              <li><span>Score de 0 a 100 pontos</span><span class="dossier-tag-ok">[ATIVO]</span></li>
+              <li><span>Checklist probatório por área</span><span class="dossier-tag-ok">[ATIVO]</span></li>
             </ul>
           </article>
-          <article class="cards">
-            <spam class="badge badge-amarelo">MODULO 02 &bull; PRAZOS LEGAIS</spam>
+
+          <article class="card">
+            <span class="badge badge-amarelo">MÓDULO 02 &bull; PRAZOS LEGAIS</span>
             <h3 style="margin-top: 12px;">Guardião Prescricional CLT/CDC/CC</h3>
             <p>Cálculo automático do marco prescricional bienal (24 meses CLT), trienal (36 meses CC/LGPD) e quinquenal (60 meses CDC), com alerta preventivo aos 90 dias.</p>
             <ul class="dossier-checklist">
-              <li><span>Trava contra caso prescrito</span><span class="dossier-tag-ok"> [ATIVO]</span></li>
-              <li><span>Fundamentação legal no dossiê</span><span class="dossiertag-ok">[ATIVO]</span></li>
+              <li><span>Trava contra caso prescrito</span><span class="dossier-tag-ok">[ATIVO]</span></li>
+              <li><span>Fundamentação legal no dossiê</span><span class="dossier-tag-ok">[ATIVO]</span></li>
             </ul>
           </article>
-          <article class="cards">
-            <spam class="badge badge-verde">MODULO 03 &bull; GOVERNANÇA</spam>
+
+          <article class="card">
+            <span class="badge badge-verde">MÓDULO 03 &bull; GOVERNANÇA</span>
             <h3 style="margin-top: 12px;">Compliance LGPD &amp; Ética OAB</h3>
-            <p>Detecção automática de excesso de dados pessoais no relato livre (Art. 6º, III, LGPD) e assistente virtual VERA alinhada à Lei nº 8.906/1994 e Res. CNJ 615/2025.</p>
+            <p>Detecção automática de excesso de dados pessoais no relato livre (Art. 6º, III, LGPD) e assistente virtual VERA alinhada à Lei nº 8.906/1994 e diretrizes da Res. CNJ nº 615/2025.</p>
             <ul class="dossier-checklist">
-              <li><span>Filtro de CPF/e-mail no relato</span><span class="dossier-tag-ok"> [ATIVO]</span></li>
-              <li><span>Zero vazamento a terceiros</span><span class="dossiertag-ok">[ATIVO]</span></li>
+              <li><span>Filtro de CPF/e-mail no relato</span><span class="dossier-tag-ok">[ATIVO]</span></li>
+              <li><span>Minimização: CPF bloqueado antes do envio</span><span class="dossier-tag-ok">[ATIVO]</span></li>
             </ul>
           </article>
         </div>
-        <h3 style="margin-top: 36px; margin-bottom: 16px;">2. Planos de Assinaturas Mensal(Arquitetura flexbox)</h3>
+
+        <h3 style="margin-top: 36px; margin-bottom: 16px;">2. Planos de Assinatura Mensal (Arquitetura Flexbox)</h3>
         <div class="cards-flex">
-          <article class="cards">
+          <article class="card">
             <span class="dossier-preview__proto">LICENÇA INDIVIDUAL &bull; OAB SOLO</span>
             <h3 style="margin-top: 4px;">Advogado Solo</h3>
             <p style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: var(--navy-900); margin-bottom: 12px;">R$ 190<span style="font-size: 0.85rem; font-weight: 500; color: var(--muted);">/mês</span></p>
@@ -168,32 +272,38 @@
               <li><span>Franquia mensal</span><strong>Até 80 triagens</strong></li>
               <li><span>Usuários inclusos</span><strong>1 advogado</strong></li>
               <li><span>Ramos habilitados</span><strong>CLT, CDC, Cível, LGPD</strong></li>
-              <li><span>Histórico local (localStorage)</span><span class="dossiertag-ok">[INCLUSO]</span></li>
+              <li><span>Checklist e histórico local</span><span class="dossier-tag-ok">[INCLUSO]</span></li>
             </ul>
-            <a href="#contato" class="btn btn-outline-dark" style="width: 100%; justify-content: center;">Selecionar Plano Solo</a>
+            <a href="#contato" class="btn btn-outline-dark" data-selecionar-plano="solo" style="width: 100%; justify-content: center;">Selecionar Plano Solo</a>
           </article>
+
           <article class="card card--destaque">
-            <span class="dossier-preview__proto">SOCIEDADE DE ADVOGADOS &bull;PRO</span>
+            <span class="dossier-preview__proto">SOCIEDADE DE ADVOGADOS &bull; PRO</span>
             <h3 style="margin-top: 4px;">Escritório Pro</h3>
             <p style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: var(--navy-900); margin-bottom: 12px;">R$ 590<span style="font-size: 0.85rem; font-weight: 500; color: var(--muted);">/mês</span></p>
             <p>Para bancas jurídicas que exigem pré-triagem assistida pela IA VERA, controle prescricional e auditoria LGPD.</p>
             <ul class="dossier-checklist" style="margin-bottom: 16px;">
               <li><span>Franquia mensal</span><strong>Até 400 triagens</strong></li>
               <li><span>Usuários inclusos</span><strong>Até 5 usuários</strong></li>
-              <li><span>Assistente Virtual VERA 24/7</span><span class="dossiertag-ok">[INCLUSO]</span></li>
-              <li><span>Trilha de Auditoria LGPD</span><span class="dossier-tagok">[INCLUSO]</span></li>
+              <li><span>Assistente Virtual VERA 24/7</span><span class="dossier-tag-ok">[INCLUSO]</span></li>
+              <li><span>Trilha de Auditoria LGPD</span><span class="dossier-tag-ok">[INCLUSO]</span></li>
             </ul>
-            <a href="#contato" class="btn btn-gold" style="width: 100%; justify-content: center;">Contratar Escritório Pro &rarr;</a>  
+            <a href="#contato" class="btn btn-gold" data-selecionar-plano="pro" style="width: 100%; justify-content: center;">Contratar Escritório Pro &rarr;</a>
           </article>
+
           <article class="card">
-            <span class="dossier-preview__proto">DEPARTAMENTO JURÍDICO &bull;ENTERPRISE</span>
+            <span class="dossier-preview__proto">DEPARTAMENTO JURÍDICO &bull; ENTERPRISE</span>
             <h3 style="margin-top: 4px;">Corporate Jurídico</h3>
             <p style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; color: var(--navy-900); margin-bottom: 12px;">R$ 1.490<span style="font-size: 0.85rem; font-weight: 500; color: var(--muted);">/mês</span></p>
-            <p>Infraestrutura dedicada para departamentos jurídicos de PMEs com alto volume contencioso e regras customizadas </p>
+            <p>Infraestrutura dedicada para departamentos jurídicos de PMEs com alto volume contencioso, API e SLA prioritário.</p>
+            <ul class="dossier-checklist" style="margin-bottom: 16px;">
+              <li><span>Franquia mensal</span><strong>Triagens ilimitadas</strong></li>
+              <li><span>Usuários inclusos</span><strong>Múltiplas equipes</strong></li>
+              <li><span>Integração via API &amp; Webhook</span><span class="dossier-tag-ok">[INCLUSO]</span></li>
+              <li><span>SLA dedicado e regras próprias</span><span class="dossier-tag-ok">[INCLUSO]</span></li>
+            </ul>
+            <a href="#contato" class="btn btn-outline-dark" data-selecionar-plano="corporate" style="width: 100%; justify-content: center;">Solicitar Proposta Corporate</a>
           </article>
-        </div>
-        <div class="dossier-frame">
-          <p class="text-muted">Espaço reservado para os 3 cards de módulos técnicos (.cards-grid) e os 3 cards de planos mensais (.cards-flex: Advogado Solo R$ 190/mês, Escritório Pro R$ 590/mês e Corporate Jurídico).</p>
         </div>
       </div>
     </section>
@@ -203,63 +313,89 @@
       <div class="container">
         <div class="section-kicker">§ 04 — Subscrição Institucional &amp; Atendimento Assistido por IA</div>
         <h2>Solicitar Demonstração ou Contratar Plano</h2>
-        <p class="text-muted"> Preencha os dados institucionais do seu escritório para simular a franquia ideal e emitir o protocolo imediato de atendimento.</p>
+        <p class="text-muted">Preencha os dados institucionais do seu escritório para simular a franquia ideal e emitir o protocolo imediato de atendimento.</p>
         <div class="dossier-frame">
-          <from id="form-contato" class="form-grid" novalidate>
+          <form id="form-contato" class="form-grid" novalidate>
             <div class="form-field">
               <label for="contato-nome">Nome do Advogado ou Escritório *</label>
-              <input type="text" id="contato-nome" nome="nome" required placeholder="Ex.: Muniz &amp; Associados Advocacia"/>
+              <input type="text" id="contato-nome" name="nome" autocomplete="organization" required placeholder="Ex.: Muniz &amp; Associados Advocacia">
             </div>
+
             <div class="form-field">
               <label for="contato-registro">Registro OAB/UF ou CNPJ *</label>
-              <input type="text" id="contato-registro" nome="registro" required placeholder="Ex.: OAB/PI 12.345 ou CNPJ" />
+              <input type="text" id="contato-registro" name="registro" required placeholder="Ex.: OAB/PI 12.345 ou CNPJ">
             </div>
+
             <div class="form-field">
               <label for="contato-email">E-mail Comercial *</label>
-              <input type="email" id="contato-email" nome="email" required placeholder="contato@escritorio.adv.br"/>
+              <input type="email" id="contato-email" name="email" autocomplete="email" required placeholder="contato@escritorio.adv.br">
             </div>
+
+            <div class="form-field">
+              <label for="contato-telefone">Telefone / WhatsApp Institucional *</label>
+              <input type="tel" id="contato-telefone" name="telefone" autocomplete="tel" required placeholder="(86) 99999-0000">
+            </div>
+
             <div class="form-field">
               <label for="contato-plano">Plano SaaS Desejado *</label>
-              <select id="contato-nome" nome="plano" required>
-                <option value="solo"> Advogado Solo - R$ 190/mês (Até 80 triagens)</option>
-                <option value="pro" selected> Escritório Pro - R$ 590/mês (Até 400 triagens)</option>
-                <option value="corporate">Corporate Jurídico - R$ 1.490/mês (Ilimitado)</option>
-              </select> 
+              <select id="contato-plano" name="plano" required>
+                <option value="solo">Advogado Solo — R$ 190/mês (Até 80 triagens)</option>
+                <option value="pro" selected>Escritório Pro — R$ 590/mês (Até 400 triagens)</option>
+                <option value="corporate">Corporate Jurídico — R$ 1.490/mês (Ilimitado + API)</option>
+              </select>
             </div>
+
             <div class="form-field">
-              <label for="contato-volume">Volum Estimado de Triagens/Mês *</label>
-              <input type="number" id="contato-volume" name="volume" min="1" max="5000" value="120" required />
+              <label for="contato-volume">Volume Estimado de Triagens/Mês *</label>
+              <input type="number" id="contato-volume" name="volume" min="1" max="5000" value="120" required>
+              <small id="contato-resumo-franquia" class="text-muted">Recomendação automática: Plano Escritório Pro (R$ 590/mês comporta até 400 triagens).</small>
             </div>
-            <div class="form-field">
+
+            <div class="form-field" style="grid-column: 1 / -1;">
               <label for="contato-modalidade">Modalidade de Solicitação *</label>
-              <selected id="contato-modalidade" nome="modalidade">
-                <option value="Demonstração Guiada (7 dias)">Demonstração Guiada Gratuita (7 dias)</option>
-                <option value="Contratação Imediata (PIX/Boleto)">Contratação Imediata (PIX/Boleto CNPJ)</option> 
-              </selected>
+              <select id="contato-modalidade" name="modalidade" required>
+                <option value="Demonstração Técnica Guiada">Agendar Demonstração Técnica Guiada</option>
+                <option value="Contratação Imediata (PIX/Boleto CNPJ)">Contratação Imediata (PIX/Boleto CNPJ)</option>
+              </select>
             </div>
-          </from>
+
+            <div class="form-field" style="grid-column: 1 / -1;">
+              <label style="display: flex; align-items: flex-start; gap: 8px; font-weight: 500;">
+                <input type="checkbox" id="contato-lgpd" name="consentimentoLgpd" required style="margin-top: 4px;">
+                <span>Autorizo o tratamento dos dados institucionais informados exclusivamente para emissão de protocolo comercial e contato sobre o VeraLitis AI, nos termos do Art. 7º, I e V da LGPD (Lei nº 13.709/2018). *</span>
+              </label>
+            </div>
+
+            <div class="hero-actions" style="grid-column: 1 / -1; margin-top: 8px;">
+              <button type="submit" class="btn btn-gold">Emitir Protocolo &amp; Solicitar Atendimento</button>
+            </div>
+          </form>
+
+          <div id="contato-feedback" aria-live="polite" style="margin-top: 18px;" hidden></div>
         </div>
       </div>
     </section>
   </main>
 
   <!-- WIDGET DA ASSISTENTE VERA (Membro 3: Breno Igo) -->
-  <div id="vera-chat-widget"><!-- aria-live="polite" vai na lista de mensagens do chat, não no widget inteiro --></div>
+  <div id="vera-chat-widget"></div>
 
   <footer class="site-footer">
     <div class="container site-footer__grid">
       <div>
-        <p><strong>VeraLitis AI (VLT-2026-01)</strong> — Projeto Unificado: <strong>Desenvolvimento Web para I.A.</strong> &amp; <strong>Ferramentas de I.A. e Chatbots</strong> (PIT).</p>
-        <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994 e Resolução CNJ nº 332/2020).</p>
+        <p><strong>VeraLitis AI (VLT-2026-01)</strong> — Projeto Interdisciplinar: <strong>Desenvolvimento Web para I.A.</strong> &amp; <strong>Ferramentas de I.A. e Chatbots</strong> (PIT).</p>
+        <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994 e diretrizes de governança da Resolução CNJ nº 615/2025).</p>
       </div>
       <div class="site-footer__code">
-        MVP EM DESENVOLVIMENTO &bull; v0.2
+        RELEASE CANDIDATE &bull; v1.0
       </div>
     </div>
   </footer>
 
-  <script src="js/scoring.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/chat.js"></script>
+  <script src="js/scoring.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
 </body>
 </html>
+
+

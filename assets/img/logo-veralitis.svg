@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Logomarca VeraLitis AI">
+  <rect width="64" height="64" rx="12" fill="#0B192C"/>
+  <rect x="3" y="3" width="58" height="58" rx="9" fill="none" stroke="#C5A059" stroke-width="2"/>
+  <path d="M32 12v36M20 20h24M16 48h32" stroke="#C5A059" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M20 20l-5 12h10l-5-12zm24 0l-5 12h10l-5-12z" fill="#C5A059" fill-opacity="0.25" stroke="#C5A059" stroke-width="1.8" stroke-linejoin="round"/>
+  <text x="32" y="58" text-anchor="middle" fill="#F8FAFC" font-family="Georgia, serif" font-size="9" font-weight="bold" letter-spacing="1.5">VL•AI</text>
+</svg>

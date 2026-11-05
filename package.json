@@ -1,15 +1,16 @@
 {
   "name": "veralitis-ai",
   "version": "1.0.0",
-  "description": "SaaS de Pre-Triagem Juridica Inteligente e Compliance LGPD com Assistente Virtual VERA",
-  "main": "server.js",
+  "description": "VeraLitis AI — Plataforma SaaS de Pre-Triagem Juridica Inteligente, Calculo de Risco Prescricional e Compliance LGPD",
   "type": "module",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test tests/vera.test.cjs"
   },
   "dependencies": {
-    "@google/genai": "^1.4.0",
+    "@google/genai": "^1.0.0",
     "dotenv": "^16.4.7",
-    "express": "^5.1.0"
+    "express": "^4.21.2"
   }
 }
