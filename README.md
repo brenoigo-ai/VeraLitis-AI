@@ -39,7 +39,7 @@ A **VeraLitis AI (Sistema VLT-2026-01)** é uma plataforma LegalTech SaaS de pr�
     │   ├── fonts.css              # Declarações @font-face locais com font-display: swap
     │   └── styles.css             # Design System Editorial Forense (Navy #0B192C & Ouro #C5A059)
     ├── docs/
-    │   └── relatorio-auditoria-av3.md
+    │   └── relatorio-engenharia-prompts.md
     ├── js/
     │   ├── package.json           # Compatibilidade CommonJS para importação nos testes Node
     │   ├── scoring.js             # Motor determinístico puro (10 regras CPC + cálculo prescricional)
@@ -64,7 +64,7 @@ A aplicação foi desenhada com **degradação graciosa**. Você pode abrir o ar
 
 ### 4.2. Modo Completo com Servidor Node.js + API Google Gemini
 
-    git clone [https://github.com/brenoigo-ai/VeraLitis-AI.git](https://github.com/brenoigo-ai/VeraLitis-AI.git)
+    git clone https://github.com/brenoigo-ai/VeraLitis-AI.git
     cd VeraLitis-AI
     npm install
     cp .env.example .env
@@ -96,3 +96,28 @@ A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre 
 - **Ilustrações e Logomarca:** SVGs autorais (assets/img/logo-veralitis.svg e assets/img/fluxo-triagem.svg) desenvolvidos especificamente para o projeto (peso total < 5 KB).
 - **Contraste WCAG 2.1 AA/AAA:** Paleta editorial forense auditada com relações de contraste entre 5,54:1 e 11,97:1.
 - **Referência Normativa:** Governança inspirada nas diretrizes da **Resolução CNJ nº 615/2025**, **Lei nº 13.709/2018 (LGPD)** e **Lei nº 8.906/1994 (Estatuto da OAB)**.
+
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Front-End & UI Editorial:** HTML5 Semântico (WCAG 2.1 AA), CSS3 Custom Properties, **CSS Grid Layout** (módulos de arquitetura) e **CSS Flexbox** (cards de planos SaaS), fotografia otimizada em **WebP** (`assets/img/hero-editorial.webp`) e fontes auto-hospedadas (`css/fonts/` — zero vazamento de IP para terceiros em conformidade com a LGPD).
+- **Motor de Triagem Determinístico:** JavaScript ES6+ puro e isomórfico (`js/scoring.js`), sem dependências externas, garantindo reprodutibilidade matemática de 0 a 100 pontos.
+- **Back-End & Integração com IA:** Node.js (v20+), Express, SDK oficial `@google/genai` (Google Gemini API) e `dotenv`.
+- **Qualidade & Auditoria:** Suíte de testes unitários automatizados via `node:test` (`tests/vera.test.cjs` com 11 asserções cobrindo cálculo de score, prazos prescricionais e travas éticas).
+
+## ⚙️ Funcionalidades Principais
+
+1. **Simulador Determinístico de Viabilidade e Prescrição:** Avalia casos trabalhistas, cíveis/consumidor, previdenciários e tributários com preenchimento rápido de 3 casos reais de demonstração, calculando o *Score de Viabilidade* (0–100), a janela prescricional em meses e emitindo o **Dossiê Preliminar** auditável.
+2. **Vitrine de Módulos (CSS Grid) e Planos SaaS (CSS Flexbox):** Apresentação clara da arquitetura do produto e dos 3 planos de assinatura (*Essencial*, *Profissional* e *Institucional*) com seleção integrada ao formulário comercial.
+3. **Formulário Comercial com Geração de Protocolo:** Validação completa no cliente e no servidor com emissão de protocolo único (`VL-AAAA-XXXX`) e persistência em `data/pedidos.json`.
+4. **Assistente Virtual VERA (Híbrida: Gemini API + Motor Local):** Chatbot especializado na plataforma VeraLitis AI com suporte a agendamento automatizado de demonstração.
+
+## 🤖 Arquitetura de Integração com IA (Assistente VERA)
+
+- **Persona & Instrução de Sistema (`persona.js`):** Define a identidade da consultora **VERA**, restringindo estritamente o escopo aos módulos, planos e governança da VeraLitis AI.
+- **Function Calling (`registrar_pedido`):** Quando conectada ao servidor Node.js com `GEMINI_API_KEY`, a VERA extrai nome, escritório, e-mail, plano de interesse e horário desejado durante o diálogo e aciona diretamente a ferramenta `registrar_pedido` no servidor, gravando o agendamento e retornando o protocolo oficial ao usuário.
+- **Travas de Segurança (OAB, LGPD e Anti-Injection):**
+  - *Trava OAB (Lei nº 8.906/1994):* Bloqueia qualquer tentativa de obter parecer jurídico vinculante, promessa de ganho de causa ou redação de petições.
+  - *Trava LGPD (Lei nº 13.709/2018):* Algoritmo de validação por Módulo 11 (`contemCpfValido`) que barra o envio de CPFs no chat sem bloquear números de telefone/WhatsApp de 11 dígitos.
+  - *Defesa contra Prompt Injection e Rate Limit:* Bloqueio de comandos de subversão de instruções e limite de requisições por IP no servidor.
+- **Resiliência Offline (Fallback Transparente):** Caso o site seja aberto estaticamente (via GitHub Pages ou `index.html`) ou sem chave de API, o widget comuta automaticamente para o motor determinístico local (`js/chat.js`), mantendo 100% das respostas, travas e fluxo de agendamento funcionais.

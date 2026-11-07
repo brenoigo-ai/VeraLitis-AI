@@ -33,7 +33,7 @@ test("scoring.js: caso trabalhista maduro e tempestivo retorna faixa verde (scor
     }
   }, "2026-11-04");
 
-  assert.equal(resultado.erro, null);
+  assert.equal(resultado.erro, undefined);
   assert.equal(resultado.faixa, "verde");
   assert.ok(resultado.score >= 75);
 });
@@ -72,7 +72,7 @@ test("scoring.js: aceita 'Cível' com acento e maiuscula normalizando para 'cive
     }
   }, "2026-11-04");
 
-  assert.equal(resultado.erro, null);
+  assert.equal(resultado.erro, undefined);
   assert.equal(resultado.ramo, "civel");
   assert.equal(resultado.faixa, "verde");
 });

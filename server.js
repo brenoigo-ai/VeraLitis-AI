@@ -1,3 +1,17 @@
+function contemCpfValido(texto) {
+  const achados = String(texto).match(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g) || [];
+  return achados.some(function (c) {
+    if (/[.-]/.test(c)) return true;
+    const d = c.split("").map(Number);
+    if (new Set(d).size === 1) return false;
+    for (let t = 9; t < 11; t++) {
+      let s = 0;
+      for (let i = 0; i < t; i++) s += d[i] * (t + 1 - i);
+      if (((s * 10) % 11) % 10 !== d[t]) return false;
+    }
+    return true;
+  });
+}
 import "dotenv/config";
 import express from "express";
 import crypto from "crypto";
@@ -189,7 +203,7 @@ app.post("/api/chat", async function (req, res) {
     }
 
     /* Bloqueio LGPD no servidor ANTES de enviar ao modelo externo */
-    if (REGEX_CPF.test(mensagem)) {
+    if (contemCpfValido(mensagem)) {
       return res.json({
         resposta: "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança, o número foi bloqueado antes do envio ao modelo externo. Como posso ajudar com os planos ou funcionamento da plataforma?",
         sessionId: sessionId
@@ -208,7 +222,7 @@ app.post("/api/chat", async function (req, res) {
           systemInstruction: montarSystemInstruction(),
           tools: [ferramentaRegistrarPedido],
           temperature: 0.3,
-          maxOutputTokens: 320
+          maxOutputTokens: 1024
         }
       });
       sessoes.set(sessionId, { chat: chat, ultimoUso: Date.now(), pedidosRegistrados: 0 });
@@ -230,8 +244,7 @@ app.post("/api/chat", async function (req, res) {
         if (chamada.name === "registrar_pedido") {
           if (sessao.pedidosRegistrados >= 2) {
             retornosFuncoes.push({
-              functionResponse: {
-                name: chamada.name,
+              functionResponse: { id: chamada.id, name: chamada.name,
                 response: { sucesso: false, erro: "Limite de pedidos por sessão atingido." }
               }
             });
@@ -239,16 +252,14 @@ app.post("/api/chat", async function (req, res) {
             const pedidoSalvo = salvarPedido(chamada.args || {});
             sessao.pedidosRegistrados += 1;
             retornosFuncoes.push({
-              functionResponse: {
-                name: chamada.name,
+              functionResponse: { id: chamada.id, name: chamada.name,
                 response: { sucesso: true, pedido: pedidoSalvo }
               }
             });
           }
         } else {
           retornosFuncoes.push({
-            functionResponse: {
-              name: chamada.name,
+            functionResponse: { id: chamada.id, name: chamada.name,
               response: { sucesso: false, erro: "Ferramenta desconhecida: " + chamada.name }
             }
           });

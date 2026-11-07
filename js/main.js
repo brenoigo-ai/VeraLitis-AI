@@ -112,7 +112,7 @@
       badge.textContent = "Score " + resultado.score + "/100 • Maduro";
     }
     if (pct) {
-      pct.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
+      pct.textContent = resultado.score + "% (FAIXA " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase()) + ")";
     }
     if (fill) {
       fill.style.width = resultado.score + "%";
@@ -140,7 +140,7 @@
         dataHora: new Date().toLocaleString("pt-BR"),
         ramo: NOMES_RAMO[resultado.ramo] || resultado.ramo,
         score: resultado.score,
-        faixa: resultado.faixa.toUpperCase()
+        faixa: resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase())
       });
       localStorage.setItem(STORAGE_HISTORICO, JSON.stringify(lista.slice(0, 6)));
       renderizarHistorico();
@@ -233,14 +233,14 @@
 
     if (badge) {
       badge.className = "badge badge-" + resultado.faixa;
-      badge.textContent = "Score " + resultado.score + "/100 • Faixa " + resultado.faixa.toUpperCase();
+      badge.textContent = "Score " + resultado.score + "/100 • Faixa " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase());
     }
     if (msg) msg.textContent = resultado.mensagem;
     const alertaCritico = document.getElementById("res-alerta-critico");
-    const corFaixa = resultado.faixa === "verde" ? "#16A34A" : resultado.faixa === "amarelo" ? "#D97706" : "#DC2626";
+    const corFaixa = resultado.faixa === "verde" ? "var(--verde)" : resultado.faixa === "amarelo" ? "var(--amarelo)" : "#DC2626";
 
     if (barraTexto) {
-      barraTexto.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
+      barraTexto.textContent = resultado.score + "% (FAIXA " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase()) + ")";
       barraTexto.style.color = corFaixa;
       barraTexto.style.fontWeight = "700";
     }
@@ -255,11 +255,11 @@
         alertaCritico.style.background = "#FEE2E2";
         alertaCritico.style.border = "2px solid #DC2626";
         alertaCritico.style.color = "#991B1B";
-        alertaCritico.textContent = "⛔ TRAVA DE RISCO PRESCRICIONAL ATIVADA (CPC, Art. 487, II): Apesar de o relato pontuar " + resultado.score + "/100 nos critérios documentais, o prazo legal de " + resultado.prescricao.prazoMeses + " meses já foi ultrapassado em " + Math.abs(resultado.prescricao.diasRestantes) + " dias (" + resultado.prescricao.baseLegal + "). O caso é rebaixado obrigatoriamente para a FAIXA VERMELHA.";
+        alertaCritico.textContent = "⛔ TRAVA DE RISCO PRESCRICIONAL ATIVADA (CPC, Art. 487, II): Apesar de o relato pontuar " + resultado.score + "/100 nos critérios documentais, o prazo legal de " + resultado.prescricao.meses + " meses já foi ultrapassado em " + Math.abs(resultado.prescricao.diasRestantes) + " dias (" + resultado.prescricao.baseLegal + "). O caso é rebaixado obrigatoriamente para a FAIXA VERMELHA.";
       } else if (resultado.faixa === "amarelo") {
         alertaCritico.hidden = false;
         alertaCritico.style.background = "#FEF3C7";
-        alertaCritico.style.border = "2px solid #D97706";
+        alertaCritico.style.border = "2px solid var(--amarelo)";
         alertaCritico.style.color = "#92400E";
         alertaCritico.textContent = "⚠️ ATENÇÃO — PENDÊNCIA PROBATÓRIA (FAIXA AMARELA): O caso é tempestivo, mas exige juntada de documentos comprobatórios mínimos antes do ajuizamento.";
       } else {

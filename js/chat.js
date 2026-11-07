@@ -1,3 +1,17 @@
+function contemCpfValido(texto) {
+  const achados = String(texto).match(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g) || [];
+  return achados.some(function (c) {
+    if (/[.-]/.test(c)) return true;
+    const d = c.split("").map(Number);
+    if (new Set(d).size === 1) return false;
+    for (let t = 9; t < 11; t++) {
+      let s = 0;
+      for (let i = 0; i < t; i++) s += d[i] * (t + 1 - i);
+      if (((s * 10) % 11) % 10 !== d[t]) return false;
+    }
+    return true;
+  });
+}
 /* =============================================================
    VeraLitis AI — js/chat.js (Membro 3: Breno Igo)
    Widget da Assistente Virtual VERA:
@@ -40,7 +54,7 @@
     }
 
     /* 1. Trava LGPD: Deteccao de CPF no chat */
-    if (REGEX_CPF.test(texto)) {
+    if (contemCpfValido(texto)) {
       return "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança e privacidade, o número foi bloqueado e não deve ser enviado no chat. Como posso ajudar com os planos ou funcionamento da plataforma?";
     }
 
@@ -301,7 +315,7 @@
       adicionarMensagem("Você", mensagem, "vera-msg--user");
 
       /* Bloqueio preventivo LGPD antes de chamar a rede */
-      if (REGEX_CPF.test(mensagem)) {
+      if (contemCpfValido(mensagem)) {
         adicionarMensagem(
           "VERA",
           "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança, o número foi bloqueado localmente e não foi enviado ao servidor. Como posso ajudar com os planos ou funcionamento da plataforma?",
