@@ -907,3 +907,175 @@ h1, h2, .section-title {
   .hero-telemetry-card { position: static; width: 100%; border-top: 1px solid rgba(212,175,55,0.4); }
   .hero-photo-frame { max-height: none; box-shadow: 6px 6px 0px rgba(9, 23, 44, 0.92); }
 }
+
+/* === TRANSFORMACAO VISUAL DINAMICA DE ALTO IMPACTO (KAGE / SWISS EDITORIAL) === */
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  50% { transform: scale(1.15); opacity: 0.85; box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes barLoad {
+  from { width: 0%; }
+}
+
+header, .site-header {
+  backdrop-filter: blur(14px) !important;
+  background: rgba(9, 23, 44, 0.90) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.35) !important;
+}
+
+#inicio, .hero, .hero-section {
+  background: radial-gradient(circle at 85% 20%, rgba(212, 175, 55, 0.16) 0%, transparent 45%),
+              linear-gradient(135deg, #06101E 0%, #09172C 55%, #112645 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-editorial-showcase {
+  margin: 28px 0 !important;
+  width: 100%;
+}
+.hero-photo-frame {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(212, 175, 55, 0.65);
+  box-shadow: 14px 14px 0px #D4AF37, 0 25px 50px rgba(0,0,0,0.5) !important;
+  background: #09172C;
+  max-height: 410px;
+}
+.hero-photo-img {
+  width: 100%;
+  height: 390px;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.1) brightness(0.82);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-photo-frame:hover .hero-photo-img {
+  transform: scale(1.04);
+}
+.hero-photo-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(9, 23, 44, 0.92);
+  backdrop-filter: blur(10px);
+  color: #FFFFFF;
+  border: 1px solid #D4AF37;
+  padding: 8px 14px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-radius: 3px;
+}
+.pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: pulseGlow 2s infinite;
+}
+.hero-telemetry-card {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(9, 23, 44, 0.94);
+  backdrop-filter: blur(14px);
+  border: 1.5px solid #D4AF37;
+  padding: 16px 20px;
+  color: #F8FAFC;
+  font-family: var(--font-mono, monospace);
+  min-width: 290px;
+  border-radius: 4px;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.6);
+  animation: floatCard 4.5s ease-in-out infinite;
+}
+.t-bar {
+  width: 100%;
+  height: 5px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.t-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4AF37, #22C55E);
+  animation: barLoad 1.4s ease-out;
+}
+
+/* Botoes de 1 clique e Cards com interatividade viva */
+button[data-preset], .preset-btn, .btn-preset {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 1.5px solid #09172C !important;
+  position: relative;
+}
+button[data-preset]:hover, .preset-btn:hover, .btn-preset:hover {
+  transform: translateY(-3px) !important;
+  background: #09172C !important;
+  color: #D4AF37 !important;
+  box-shadow: 4px 4px 0px #D4AF37 !important;
+}
+
+/* === CORRECAO DE CONTRASTE SECAO 1 (TEXTO CLARO NO HERO ESCURO + PRESERVACAO DOS CARDS BRANCOS) === */
+#inicio h1,
+#inicio .hero-title,
+#inicio .hero-copy h1 {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+#inicio .hero-copy h1 em,
+#inicio h1 em,
+#inicio h1 span {
+  color: #D4AF37 !important;
+}
+#inicio > .container > p,
+#inicio .hero-copy > p,
+#inicio .hero-lead,
+#inicio .hero-subtitle,
+#inicio .section-kicker,
+#inicio .eyebrow {
+  color: #E2E8F0 !important;
+}
+#inicio .section-kicker,
+#inicio .eyebrow {
+  color: #D4AF37 !important;
+}
+/* Botao secundario "Conhecer Modulos & Planos" visivel no fundo escuro */
+#inicio a.btn-secondary,
+#inicio a.btn-outline,
+#inicio .hero-actions a:not(.btn-primary) {
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #09172C !important;
+  border: 1.5px solid #D4AF37 !important;
+  font-weight: 700 !important;
+}
+#inicio a.btn-secondary:hover,
+#inicio a.btn-outline:hover,
+#inicio .hero-actions a:not(.btn-primary):hover {
+  background: #D4AF37 !important;
+  color: #09172C !important;
+}
+/* Garantir que os cards de fundo branco dentro do Hero mantenham texto escuro legivel */
+#inicio .hero-card,
+#inicio .dossier-preview,
+#inicio .metric-card,
+#inicio .stat-card,
+#inicio [style*="background: var(--surface)"],
+#inicio [style*="background:#fff"],
+#inicio [style*="background: #fff"] {
+  color: #09172C !important;
+}
+/* Garantir legibilidade no banner/diagrama da Secao 03 */
+#modulos svg text {
+  fill: #F8FAFC !important;
+}

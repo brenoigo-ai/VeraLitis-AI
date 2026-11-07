@@ -112,7 +112,7 @@
       badge.textContent = "Score " + resultado.score + "/100 • Maduro";
     }
     if (pct) {
-      pct.textContent = resultado.score + "% (FAIXA " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase()) + ")";
+      pct.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
     }
     if (fill) {
       fill.style.width = resultado.score + "%";
@@ -140,7 +140,7 @@
         dataHora: new Date().toLocaleString("pt-BR"),
         ramo: NOMES_RAMO[resultado.ramo] || resultado.ramo,
         score: resultado.score,
-        faixa: resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase())
+        faixa: resultado.faixa.toUpperCase()
       });
       localStorage.setItem(STORAGE_HISTORICO, JSON.stringify(lista.slice(0, 6)));
       renderizarHistorico();
@@ -233,14 +233,14 @@
 
     if (badge) {
       badge.className = "badge badge-" + resultado.faixa;
-      badge.textContent = "Score " + resultado.score + "/100 • Faixa " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase());
+      badge.textContent = "Score " + resultado.score + "/100 • Faixa " + resultado.faixa.toUpperCase();
     }
     if (msg) msg.textContent = resultado.mensagem;
     const alertaCritico = document.getElementById("res-alerta-critico");
-    const corFaixa = resultado.faixa === "verde" ? "var(--verde)" : resultado.faixa === "amarelo" ? "var(--amarelo)" : "#DC2626";
+    const corFaixa = resultado.faixa === "verde" ? "#16A34A" : resultado.faixa === "amarelo" ? "#D97706" : "#DC2626";
 
     if (barraTexto) {
-      barraTexto.textContent = resultado.score + "% (FAIXA " + resultado.({ verde: "VERDE", amarelo: "AMARELA", vermelho: "VERMELHA" }[faixa] || faixa.toUpperCase()) + ")";
+      barraTexto.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
       barraTexto.style.color = corFaixa;
       barraTexto.style.fontWeight = "700";
     }
@@ -259,7 +259,7 @@
       } else if (resultado.faixa === "amarelo") {
         alertaCritico.hidden = false;
         alertaCritico.style.background = "#FEF3C7";
-        alertaCritico.style.border = "2px solid var(--amarelo)";
+        alertaCritico.style.border = "2px solid #D97706";
         alertaCritico.style.color = "#92400E";
         alertaCritico.textContent = "⚠️ ATENÇÃO — PENDÊNCIA PROBATÓRIA (FAIXA AMARELA): O caso é tempestivo, mas exige juntada de documentos comprobatórios mínimos antes do ajuizamento.";
       } else {

@@ -107,7 +107,7 @@ A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre 
 
 ## ⚙️ Funcionalidades Principais
 
-1. **Simulador Determinístico de Viabilidade e Prescrição:** Avalia casos trabalhistas, cíveis/consumidor, previdenciários e tributários com preenchimento rápido de 3 casos reais de demonstração, calculando o *Score de Viabilidade* (0–100), a janela prescricional em meses e emitindo o **Dossiê Preliminar** auditável.
+1. **Simulador Determinístico de Viabilidade e Prescrição:** Avalia casos trabalhistas, cíveis, de consumidor e conformidade LGPD com preenchimento rápido de 3 casos reais de demonstração, calculando o *Score de Viabilidade* (0–100), a janela prescricional em meses e emitindo o **Dossiê Preliminar** auditável.
 2. **Vitrine de Módulos (CSS Grid) e Planos SaaS (CSS Flexbox):** Apresentação clara da arquitetura do produto e dos 3 planos de assinatura (*Essencial*, *Profissional* e *Institucional*) com seleção integrada ao formulário comercial.
 3. **Formulário Comercial com Geração de Protocolo:** Validação completa no cliente e no servidor com emissão de protocolo único (`VL-AAAA-XXXX`) e persistência em `data/pedidos.json`.
 4. **Assistente Virtual VERA (Híbrida: Gemini API + Motor Local):** Chatbot especializado na plataforma VeraLitis AI com suporte a agendamento automatizado de demonstração.
