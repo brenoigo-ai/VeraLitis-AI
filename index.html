@@ -17,7 +17,7 @@
 <body>
 
   <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
-  </div>
+  
 
   <!-- CABECALHO INSTITUCIONAL (MEMBRO 1) -->
   <header class="site-header">
@@ -46,19 +46,24 @@
       <div class="container">
         <div style="margin-bottom: 22px;"><div class="hero-editorial-showcase">
           <div class="hero-photo-frame">
-            <img src="assets/img/hero-editorial.webp" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=85'" alt="Ambiente executivo de auditoria jurídica e inteligência artificial" width="640" height="420" loading="eager" class="hero-photo-img" />
+            <img src="assets/img/hero-editorial.webp" alt="Ambiente executivo de auditoria jurídica e inteligência artificial" width="640" height="420" loading="eager" class="hero-photo-img" />
             <div class="hero-photo-badge">
               <span class="pulse-dot" aria-hidden="true"></span>
-              <span>ENGINE DETERMINÍSTICO AO VIVO · CNJ 615/2025</span>
+              <span>MOTOR DETERMINÍSTICO · INSPIRADO NA RES. CNJ 615/2025</span>
             </div>
-            <div class="hero-telemetry-card" aria-label="Telemetria em tempo real">
+            <div class="hero-telemetry-card" role="group" aria-label="Resumo do caso de referência">
               <div class="telemetry-header">
-                <span>AUDITORIA #VL-2026</span>
-                <span class="telemetry-tag">SCORE 88/100 · VERDE</span>
+                <span>CASO DE REFERÊNCIA</span>
+                <span class="telemetry-tag" id="hero-tel-tag">SCORE 85/100 · VERDE</span>
               </div>
               <div class="telemetry-bars">
-                <div class="t-row"><span>PROVA DOCUMENTAL</span><strong>35 / 35 pts</strong></div>
-                <div class="t-row"><div class="t-bar"><div class="t-fill" style="width:100%"></div></div></div>
+                <div class="t-row"><span>VERIFICAÇÕES AUTOMÁTICAS</span><strong id="hero-tel-auto">45 / 45 pts</strong></div>
+                <div class="t-row"><div class="t-bar"><div class="t-fill" id="hero-tel-auto-fill" style="width:100%"></div></div></div>
+                <div class="t-row"><span>DECLARAÇÕES DO USUÁRIO</span><strong id="hero-tel-decl">40 / 55 pts</strong></div>
+                <div class="t-row"><div class="t-bar"><div class="t-fill" id="hero-tel-decl-fill" style="width:73%"></div></div></div>
+                <div class="t-row"><span>PRAZO PRESCRICIONAL</span><strong id="hero-tel-prazo">REGULAR</strong></div>
+              </div>
+            </div>
                 <div class="t-row"><span>ADERÊNCIA SÚMULA</span><strong>25 / 25 pts</strong></div>
                 <div class="t-row"><div class="t-bar"><div class="t-fill" style="width:100%"></div></div></div>
                 <div class="t-row"><span>RISCO PRESCRICIONAL</span><strong>CONTROLADO (18m)</strong></div>
@@ -76,18 +81,18 @@
               <a href="#simulador" class="btn btn-gold">Executar Simulador de Caso &rarr;</a>
               <a href="#planos" class="btn btn-outline-dark">Conhecer Módulos &amp; Planos</a>
             </div>
-            <div class="metrics-ledger" aria-label="Indicadores técnicos da plataforma">
+            <div class="metrics-ledger" role="group" aria-label="Indicadores técnicos da plataforma">
               <div class="metrics-ledger__item">
                 <span class="metrics-ledger__val">10 Regras</span>
-                <span class="metrics-ledger__label">Critérios objetivos do CPC Art. 319, CLT e CDC</span>
+                <span class="metrics-ledger__label">Critérios do CPC Art. 319, CLT e CDC (5 automáticos e 5 declarados)</span>
               </div>
               <div class="metrics-ledger__item">
                 <span class="metrics-ledger__val">4 Ramos</span>
                 <span class="metrics-ledger__label">Trabalhista/TRT, Consumidor, Cível e LGPD</span>
               </div>
               <div class="metrics-ledger__item">
-                <span class="metrics-ledger__val">100% OAB</span>
-                <span class="metrics-ledger__label">Trava ética sem promessa de resultado</span>
+                <span class="metrics-ledger__val">Trava OAB</span>
+                <span class="metrics-ledger__label">Sem promessa de resultado nem orientação jurídica individualizada</span>
               </div>
             </div>
           </div>
@@ -135,7 +140,7 @@
         <div class="section-kicker">§ 02 — Motor Determinístico de Triagem Preliminar</div>
         <h2>Simulador de Admissibilidade &amp; Checklist Probatório</h2>
         <div class="legal-notice-bar">
-          <strong>AVISO DE CONFORMIDADE OAB (LEI Nº 8.906/1994):</strong> Triagem operacional preliminar destinada exclusivamente a escritórios e departamentos jurídicos — não constitui parecer jurídico vinculante nem substitui o juízo técnico do advogado habilitado.
+          <strong>AVISO DE CONFORMIDADE OAB (LEI Nº 8.906/1994):</strong> Triagem operacional preliminar destinada exclusivamente a escritórios e departamentos jurídicos — não constitui orientação ou parecer jurídico nem substitui o juízo técnico do advogado habilitado.
         </div>
 
         <div class="dossier-frame">
@@ -144,7 +149,7 @@
             <div class="hero-actions" style="margin-top: 8px;">
               <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="trabalhista">Caso 1: Trabalhista Maduro (Faixa Verde)</button>
               <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="consumidor">Caso 2: Consumidor c/ Pendência (Amarelo)</button>
-              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="prescrito">Caso 3: Prescrição Consumada (Vermelho)</button>
+              <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="prescrito">Caso 3: Possível Prescrição (Vermelho)</button>
               <button type="button" class="btn btn-outline-dark btn-caso-exemplo" data-caso="lgpd">Caso 4: Incidente LGPD c/ CPF no Relato</button>
             </div>
           </div>
@@ -153,15 +158,15 @@
             <div class="form-field">
               <label for="sim-ramo">Ramo Jurídico (TPU/CNJ) *</label>
               <select id="sim-ramo" name="ramo" required>
-                <option value="trabalhista">Direito do Trabalho (CLT — Prescrição Bienal 24m)</option>
-                <option value="consumidor">Direito do Consumidor (CDC — Prescrição Quinquenal 60m)</option>
-                <option value="civel">Direito Civil / Contratos (CC — Prescrição Trienal 36m)</option>
+                <option value="trabalhista">Direito do Trabalho (CLT — Bienal 24m, a contar da rescisão | Art. 7º, XXIX, CF)</option>
+                <option value="consumidor">Consumidor — fato do produto/serviço (CDC, Art. 27 — 60m | Vício: Art. 26)</option>
+                <option value="civel">Civil — reparação extracontratual (CC, Art. 206, § 3º, V — 36m | Contratual: 10a STJ)</option>
                 <option value="lgpd">Proteção de Dados / LGPD (Lei 13.709/18 — 36m)</option>
               </select>
             </div>
 
             <div class="form-field">
-              <label for="sim-data">Data do Fato Gerador ou Rescisão *</label>
+              <label for="sim-data">Data do fato (no caso trabalhista, a da rescisão) *</label>
               <input type="date" id="sim-data" name="dataFato" required>
             </div>
 
@@ -174,9 +179,9 @@
             <fieldset style="grid-column: 1 / -1; border: 1px solid var(--border, #cbd5e1); padding: 14px; border-radius: 8px;">
               <legend style="font-weight: 700; padding: 0 6px;">Verificação de Requisitos Probatórios (CPC, Art. 319)</legend>
               <div class="cards-grid" style="margin-top: 8px;">
-                <label><input type="checkbox" id="chk-provas" checked> Possui prova documental mínima (contrato, CTPS, nota, prints)</label>
-                <label><input type="checkbox" id="chk-re" checked> Parte ré identificada (CNPJ/Razão Social ou empregador)</label>
-                <label><input type="checkbox" id="chk-pedido" checked> Pretensão / pedido principal delimitado</label>
+                <label><input type="checkbox" id="chk-provas"> Possui prova documental mínima (contrato, CTPS, nota, prints)</label>
+                <label><input type="checkbox" id="chk-re"> Parte ré identificada (CNPJ/Razão Social ou empregador)</label>
+                <label><input type="checkbox" id="chk-pedido"> Pretensão / pedido principal delimitado</label>
                 <label><input type="checkbox" id="chk-tentativa"> Tentativa prévia de solução (SAC, protocolo, notificação)</label>
                 <label><input type="checkbox" id="chk-valor"> Valor estimado da causa ou extensão do dano apurável</label>
               </div>
@@ -255,7 +260,7 @@
           <article class="card">
             <span class="badge badge-verde">MÓDULO 01 &bull; MOTOR TPU/CNJ</span>
             <h3 style="margin-top: 12px;">Triagem Determinística Auditável</h3>
-            <p>Aferição objetiva de 10 critérios inspirados no art. 319 do CPC, classificando o relato do cliente em faixas Verde, Amarela ou Vermelha sem alucinação.</p>
+            <p>Aferição de 10 critérios (5 verificados pelo motor e 5 declarados pelo usuário) inspirados no art. 319 do CPC, classificando o relato do cliente em faixas Verde, Amarela ou Vermelha sem alucinação.</p>
             <ul class="dossier-checklist">
               <li><span>Score de 0 a 100 pontos</span><span class="dossier-tag-ok">[ATIVO]</span></li>
               <li><span>Checklist probatório por área</span><span class="dossier-tag-ok">[ATIVO]</span></li>
@@ -267,7 +272,7 @@
             <h3 style="margin-top: 12px;">Guardião Prescricional CLT/CDC/CC</h3>
             <p>Cálculo automático do marco prescricional bienal (24 meses CLT), trienal (36 meses CC/LGPD) e quinquenal (60 meses CDC), com alerta preventivo aos 90 dias.</p>
             <ul class="dossier-checklist">
-              <li><span>Trava contra caso prescrito</span><span class="dossier-tag-ok">[ATIVO]</span></li>
+              <li><span>Alerta de possível prescrição</span><span class="dossier-tag-ok">[ATIVO]</span></li>
               <li><span>Fundamentação legal no dossiê</span><span class="dossier-tag-ok">[ATIVO]</span></li>
             </ul>
           </article>
@@ -384,7 +389,7 @@
             <div class="form-field" style="grid-column: 1 / -1;">
               <label style="display: flex; align-items: flex-start; gap: 8px; font-weight: 500;">
                 <input type="checkbox" id="contato-lgpd" name="consentimentoLgpd" required style="margin-top: 4px;">
-                <span>Autorizo o tratamento dos dados institucionais informados exclusivamente para emissão de protocolo comercial e contato sobre o VeraLitis AI, nos termos do Art. 7º, I e V da LGPD (Lei nº 13.709/2018). *</span>
+                <span>Autorizo o tratamento dos dados institucionais informados exclusivamente para emissão de protocolo comercial e contato sobre o VeraLitis AI, com base no consentimento (Art. 7º, I, e Art. 8º da LGPD — Lei nº 13.709/2018). *</span>
               </label>
             </div>
 
@@ -406,7 +411,7 @@
     <div class="container site-footer__grid">
       <div>
         <p><strong>VeraLitis AI (VLT-2026-01)</strong> — Projeto Interdisciplinar: <strong>Desenvolvimento Web para I.A.</strong> &amp; <strong>Ferramentas de I.A. e Chatbots</strong> (PIT).</p>
-        <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui parecer jurídico vinculante nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994 e diretrizes de governança da Resolução CNJ nº 615/2025).</p>
+        <p>Ferramenta acadêmica de triagem operacional preliminar. Não constitui orientação ou parecer jurídico nem substitui a análise de um advogado habilitado (Lei nº 8.906/1994 e diretrizes de governança da Resolução CNJ nº 615/2025).</p>
       </div>
       <div class="site-footer__code">
         RELEASE CANDIDATE &bull; v1.0
@@ -416,6 +421,7 @@
 
   <script src="js/scoring.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/lgpd.js" defer></script>
   <script src="js/chat.js" defer></script>
 </body>
 </html>

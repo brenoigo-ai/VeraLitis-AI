@@ -62,7 +62,7 @@ test("scoring.js: aceita 'Cível' com acento e maiuscula normalizando para 'cive
     ramo: "Cível",
     dataFato: "2026-06-01",
     relato:
-      "Contrato de locação de imóvel residencial descumprido com cobrança de multa indevida e dano material comprovado em recibos bancários, vistoria e notificações extrajudiciais.",
+      "Contrato de locação de imóvel residencial descumprido pelo locador, com cobrança de multa indevida e dano material comprovado em recibos bancários, vistoria inicial, fotografias e notificações extrajudiciais enviadas.",
     checkboxes: {
       possuiProvas: true,
       identificaRe: true,
@@ -136,7 +136,7 @@ test("chat.js: fluxo de agendamento valida contato, plano e permite cancelar a q
   assert.match(planoInvalido, /escolha um dos três planos/i);
 
   const p4 = responderLocalmente("Escritório Pro");
-  assert.match(p4, /VLT-2026-/);
+  assert.match(p4, /SIM-\d{4}-\d{4}/);
   assert.match(p4, /Escritório Pro/);
 });
 
@@ -170,4 +170,37 @@ test("Coerencia: index.html, persona.js e chat.js compartilham precos e Res. CNJ
   assert.ok(html.includes("<form id=\"form-contato\""), "index.html deve ter #form-contato");
   assert.ok(!html.includes("<from"), "index.html nao pode conter tag invalida <from>");
   assert.ok(!html.includes("<spam>"), "index.html nao pode conter tag invalida <spam>");
+});
+
+const { contemCpfValido } = require("../js/lgpd.js");
+const { classificarFaixa } = require("../js/scoring.js");
+
+test("lgpd.js: detecta CPF com ponto, espaco, barra ou sem mascara e ignora telefone formatado", function () {
+  for (const t of ["529.982.247-25", "meu cpf 529 982 247 25", "529982247/25", "52998224725"]) {
+    assert.equal(contemCpfValido(t), true, t);
+  }
+  for (const t of ["12345678900", "11111111111", "(86) 99988-7766", "Lei 8.906/1994"]) {
+    assert.equal(contemCpfValido(t), false, t);
+  }
+});
+
+test("chat.js: etapa do telefone aceita celular 86989555092 so com numeros, mas bloqueia CPF formatado", function () {
+  resetarEstadoAgendamento();
+  responderLocalmente("Quero agendar uma demonstração");
+  responderLocalmente("Araújo Advocacia");
+  assert.match(responderLocalmente("86989555092"), /Qual plano/i);
+
+  resetarEstadoAgendamento();
+  responderLocalmente("Quero agendar uma demonstração");
+  responderLocalmente("Araújo Advocacia");
+  assert.match(responderLocalmente("529.982.247-25"), /ALERTA LGPD/);
+});
+
+test("scoring.js: relato curto limita a faixa a vermelho, mesmo com tudo marcado", function () {
+  const r = analisarCaso(
+    { ramo: "trabalhista", dataFato: "2026-07-07", relato: "oi", checkboxes: { possuiProvas: true, identificaRe: true, pedidoDefinido: true, tentativaPrevia: true, valorEstimado: true } },
+    "2026-11-07"
+  );
+  assert.equal(r.relatoSuficiente, false);
+  assert.equal(r.faixa, "vermelho");
 });

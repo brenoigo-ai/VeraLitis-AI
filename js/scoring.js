@@ -16,10 +16,22 @@ const CHECKLISTS_POR_AREA = {
 };
 
 const PRAZOS_PRESCRICIONAIS = {
-  trabalhista: { meses: 24, baseLegal: "Art. 7º, XXIX, da CF/88 e art. 11 da CLT (2 anos após o fim do contrato)" },
-  consumidor: { meses: 60, baseLegal: "Art. 27 do CDC (5 anos — fato do produto ou do serviço)" },
-  civel: { meses: 36, baseLegal: "Art. 206, § 3º, V, do Código Civil (3 anos — reparação civil)" },
-  lgpd: { meses: 36, baseLegal: "A LGPD não fixa prazo próprio; adotado, por cautela, o art. 206, § 3º, V, do CC" }
+  trabalhista: {
+    meses: 24,
+    baseLegal: "Art. 7º, XXIX, da CF/88 e art. 11 da CLT (2 anos após o fim do contrato: informe a data da rescisão)"
+  },
+  consumidor: {
+    meses: 60,
+    baseLegal: "Art. 27 do CDC (5 anos — fato do produto ou do serviço; para vício, ver o art. 26)"
+  },
+  civel: {
+    meses: 36,
+    baseLegal: "Art. 206, § 3º, V, do Código Civil (3 anos — reparação civil extracontratual; contratos: em regra 10 anos, art. 205)"
+  },
+  lgpd: {
+    meses: 36,
+    baseLegal: "A LGPD não fixa prazo próprio; adotado, por cautela, o art. 206, § 3º, V, do CC"
+  }
 };
 
 /* Radicais SEM acento: o relato é normalizado (sem acento, minúsculo) antes da busca. */
@@ -44,9 +56,9 @@ const LIMITE_VERDE = 75;
 const LIMITE_AMARELO = 45;
 
 const MENSAGENS_POR_FAIXA = {
-  verde: "Caso Maduro / Alta Viabilidade Documental: pronto para agendar consulta e redigir a inicial.",
+  verde: "Caso Maduro / Alta Viabilidade Documental: critérios atendidos; agende a consulta com o advogado, a quem cabe a análise de mérito.",
   amarelo: "Viável com Pendência Probatória ou Alerta de Prazo: exige coleta urgente dos documentos do checklist.",
-  vermelho: "Relato Insuficiente, Baixa Viabilidade Preliminar ou Prescrição Consumada: complemente fatos e provas antes de acionar o advogado."
+  vermelho: "Relato Insuficiente, Baixa Viabilidade Preliminar ou Possível Prescrição: complemente fatos e provas e confirme os prazos com o advogado antes de prosseguir."
 };
 
 /* ---------- Utilitários ---------- */
@@ -122,9 +134,10 @@ function calcularPrescricao(ramo, dataFato, hoje) {
 /* ---------- Faixas ---------- */
 
 /* VERMELHO: score < 45 ou prescrição consumada. VERDE: score >= 75 sem alerta. AMARELO: demais. */
-function classificarFaixa(score, alertaPrescricao, prescrito) {
-  if (score < LIMITE_AMARELO) return "vermelho"; /* guarda incondicional (CORE-01) */
+function classificarFaixa(score, alertaPrescricao, prescrito, relatoSuficiente) {
+  if (score < LIMITE_AMARELO) return "vermelho";
   if (prescrito) return "vermelho";
+  if (relatoSuficiente === false) return "vermelho";
   if (score >= LIMITE_VERDE && !alertaPrescricao) return "verde";
   return "amarelo";
 }
@@ -167,17 +180,20 @@ function analisarCaso(entrada, hoje) {
     { id: 7,  nome: "Quantificação ou impacto (valor da causa)", pontos: 10, base: "CPC, art. 319, V", atendido: chk.valorEstimado === true },
     { id: 8,  nome: "Segurança de prazo legal (> " + DIAS_ALERTA_PRAZO + " dias)", pontos: 10, base: "Prescrição — CC, art. 189", atendido: fato !== null && prescricao.situacao === "regular" },
     { id: 9,  nome: "Aderência específica à área", pontos: 5, base: "TPU/CNJ", atendido: relatoAderenteAoRamo(relato, ramo) },
-    { id: 10, nome: "Conformidade LGPD inicial (sem dados pessoais)", pontos: 5, base: "LGPD, art. 6º, III", atendido: !dadosPessoaisDetectados }
+    { id: 10, nome: "Conformidade LGPD inicial (sem dados pessoais)", pontos: 5, base: "LGPD, art. 6º, III", atendido: contarPalavras(relato) > 0 && !dadosPessoaisDetectados }
   ];
 
   const score = criterios.reduce(function (soma, c) { return soma + (c.atendido ? c.pontos : 0); }, 0);
   const alertaPrescricao = prescricao.alerta;
-  const faixa = classificarFaixa(score, alertaPrescricao, prescricao.situacao === "prescrito");
+  const relatoSuficiente = criterios[0].atendido;
+  const prescrito = prescricao.situacao === "prescrito";
+  const faixa = classificarFaixa(score, alertaPrescricao, prescrito, relatoSuficiente);
 
   return {
     ramo: ramo,
     score: score,
     faixa: faixa,
+    relatoSuficiente: relatoSuficiente,
     alertaPrescricao: alertaPrescricao,
     dadosPessoaisDetectados: dadosPessoaisDetectados,
     prescricao: prescricao,

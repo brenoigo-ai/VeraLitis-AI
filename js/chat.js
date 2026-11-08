@@ -1,17 +1,3 @@
-function contemCpfValido(texto) {
-  const achados = String(texto).match(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g) || [];
-  return achados.some(function (c) {
-    if (/[.-]/.test(c)) return true;
-    const d = c.split("").map(Number);
-    if (new Set(d).size === 1) return false;
-    for (let t = 9; t < 11; t++) {
-      let s = 0;
-      for (let i = 0; i < t; i++) s += d[i] * (t + 1 - i);
-      if (((s * 10) % 11) % 10 !== d[t]) return false;
-    }
-    return true;
-  });
-}
 /* =============================================================
    VeraLitis AI — js/chat.js (Membro 3: Breno Igo)
    Widget da Assistente Virtual VERA:
@@ -23,15 +9,24 @@ function contemCpfValido(texto) {
 
 (function (root, factory) {
   if (typeof module === "object" && module.exports) {
-    module.exports = factory();
+    module.exports = factory(require("./lgpd.js"));
   } else {
-    root.VeraChat = factory();
+    root.VeraChat = factory(root.VeraLGPD);
   }
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (lgpd) {
   "use strict";
 
-  const REGEX_CPF = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
-  const REGEX_CONTATO = /^([^\s@]+@[^\s@]+\.[^\s@]+|\+?[\d\s()-]{10,})$/;
+  const contemCpfValido = lgpd.contemCpfValido;
+  const pareceCelularBR = lgpd.pareceCelularBR;
+  const AVISO_CPF =
+    "ALERTA LGPD (Art. 6º, III - Minimização): detectei um padrão de CPF na sua mensagem e o número " +
+    "foi bloqueado antes de qualquer envio. Se for um telefone, informe com DDD e hífen, por exemplo " +
+    "(86) 99999-0000. Como posso ajudar com os planos ou o funcionamento da plataforma?";
+  function contatoValido(texto) {
+    const digitos = (texto.match(/\d/g) || []).length;
+    const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(texto);
+    return email || (/^\+?[\d\s()-]+$/.test(texto) && digitos >= 10 && digitos <= 13);
+  }
 
   function criarEstadoAgendamentoInicial() {
     return { ativo: false, nome: "", contato: "", plano: "" };
@@ -54,8 +49,9 @@ function contemCpfValido(texto) {
     }
 
     /* 1. Trava LGPD: Deteccao de CPF no chat */
-    if (contemCpfValido(texto)) {
-      return "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança e privacidade, o número foi bloqueado e não deve ser enviado no chat. Como posso ajudar com os planos ou funcionamento da plataforma?";
+    const aguardandoContato = estado.ativo && Boolean(estado.nome) && !estado.contato;
+    if (contemCpfValido(texto) && !(aguardandoContato && pareceCelularBR(texto))) {
+      return AVISO_CPF;
     }
 
     /* 2. Cancelamento explicito do fluxo de agendamento */
@@ -112,7 +108,7 @@ function contemCpfValido(texto) {
       }
 
       if (!estado.contato) {
-        if (!REGEX_CONTATO.test(texto)) {
+        if (!contatoValido(texto)) {
           return "Preciso de um e-mail comercial válido (ex.: contato@escritorio.adv.br) ou telefone com DDD (mínimo 10 dígitos), ou digite 'cancelar'.";
         }
         estado.contato = texto;
@@ -130,7 +126,8 @@ function contemCpfValido(texto) {
           : "Escritório Pro (R$ 590/mês)";
 
       estado.plano = planoNorm;
-      const protocolo = "VLT-2026-" + String(Math.floor(1000 + Math.random() * 9000));
+      const sorteio = String(Math.floor(1000 + Math.random() * 9000));
+      const protocolo = "SIM-" + new Date().getFullYear() + "-" + sorteio;
       const resumo =
         "Simulação de agendamento concluída sob o protocolo #" +
         protocolo +
@@ -183,7 +180,14 @@ function contemCpfValido(texto) {
       norm.includes("calculo") ||
       norm.includes("tpu")
     ) {
-      return "O Simulador (§02 #simulador) avalia 10 critérios objetivos inspirados no art. 319 do CPC e verifica prazos prescricionais em 4 ramos: Trabalhista (24 meses - CLT), Consumidor (60 meses - CDC), Cível (36 meses - CC) e LGPD (36 meses). O resultado classifica o caso nas faixas Verde (75-100), Amarela (45-74) ou Vermelha (0-44 ou prescrito). Que tal testar um caso de referência na seção §02?";
+      return (
+        "O Simulador (§02 #simulador) avalia 10 critérios inspirados no art. 319 do CPC (5 verificados pelo " +
+        "motor e 5 declarados por você) e verifica prazos em 4 ramos: Trabalhista (24 meses - CLT), " +
+        "Consumidor (60 meses - CDC), Cível extracontratual (36 meses - CC) e LGPD (36 meses, adotados por " +
+        "cautela), com alerta preventivo aos 90 dias do vencimento. O resultado classifica o caso nas faixas " +
+        "Verde (75-100), Amarela (45-74) ou Vermelha (0-44, relato insuficiente ou possível prescrição). " +
+        "Que tal testar um caso de referência na seção §02?"
+      );
     }
 
     /* 8. Perguntas sobre LGPD, OAB e Governanca CNJ */
@@ -230,6 +234,7 @@ function contemCpfValido(texto) {
     let sessionId = null;
     let modoServidor = "offline";
     let enviando = false;
+    let ultimaChecagem = 0;
 
     containerRoot.innerHTML = [
       '<button id="chat-toggle" class="vera-toggle" type="button" aria-expanded="false" aria-controls="vera-window">',
@@ -287,23 +292,23 @@ function contemCpfValido(texto) {
     }
 
     async function detectarModo() {
+      ultimaChecagem = Date.now();
       try {
         const ctrl = new AbortController();
-        const timer = setTimeout(function () { ctrl.abort(); }, 2500);
+        const timer = setTimeout(function () { ctrl.abort(); }, 4000);
         const r = await fetch("/api/health", { signal: ctrl.signal });
         clearTimeout(timer);
         if (r.ok) {
           const dados = await r.json();
           if (dados && dados.ok) {
             modoServidor = "ia";
-            if (badgeModo) badgeModo.textContent = "IA generativa \u00b7 Gemini (" + (dados.modelo || "Ativo") + ")";
+            if (badgeModo) badgeModo.textContent = "IA generativa · Gemini (" + (dados.modelo || "Ativo") + ")";
             return;
           }
         }
-      } catch (_) {
-        modoServidor = "offline";
-      }
-      if (badgeModo) badgeModo.textContent = "Modo offline \u00b7 Respostas roteirizadas";
+      } catch (_) {}
+      modoServidor = "offline";
+      if (badgeModo) badgeModo.textContent = "Modo offline · Respostas roteirizadas";
     }
 
     async function enviarMensagem(textoForcado) {
@@ -312,17 +317,20 @@ function contemCpfValido(texto) {
       if (!mensagem) return;
 
       input.value = "";
-      adicionarMensagem("Você", mensagem, "vera-msg--user");
 
-      /* Bloqueio preventivo LGPD antes de chamar a rede */
-      if (contemCpfValido(mensagem)) {
-        adicionarMensagem(
-          "VERA",
-          "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança, o número foi bloqueado localmente e não foi enviado ao servidor. Como posso ajudar com os planos ou funcionamento da plataforma?",
-          "vera-msg--bot"
-        );
+      if (modoServidor !== "ia" && Date.now() - ultimaChecagem > 10000) {
+        await detectarModo();
+      }
+
+      const estado = estadoAgendamentoGlobal;
+      const aguardandoContato = modoServidor !== "ia" && estado.ativo && Boolean(estado.nome) && !estado.contato;
+      if (contemCpfValido(mensagem) && !(aguardandoContato && pareceCelularBR(mensagem))) {
+        adicionarMensagem("Você", "[mensagem ocultada: contém padrão de CPF]", "vera-msg--user");
+        adicionarMensagem("VERA", AVISO_CPF, "vera-msg--bot");
         return;
       }
+
+      adicionarMensagem("Você", mensagem, "vera-msg--user");
 
       if (modoServidor !== "ia") {
         const respostaOffline = responderLocalmente(mensagem);
@@ -336,7 +344,7 @@ function contemCpfValido(texto) {
 
       try {
         const ctrl = new AbortController();
-        const timer = setTimeout(function () { ctrl.abort(); }, 12000);
+        const timer = setTimeout(function () { ctrl.abort(); }, 25000);
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -8,7 +8,7 @@
   "use strict";
 
   const STORAGE_HISTORICO = "veralitis_historico_triagens_v1";
-  const STORAGE_PEDIDOS = "veralitis_pedidos_comerciais_v1";
+  const STORAGE_PEDIDOS_ANTIGO = "veralitis_pedidos_comerciais_v1";
 
   const NOMES_RAMO = {
     trabalhista: "Trabalhista (CLT)",
@@ -16,6 +16,42 @@
     civel: "Cível / Contratos (CC)",
     lgpd: "Proteção de Dados (LGPD)"
   };
+
+  const CRITERIOS_DECLARADOS = [3, 4, 5, 6, 7];
+  const ROTULOS_FAIXA = { verde: "Maduro", amarelo: "Com pendência", vermelho: "Baixa viabilidade" };
+  const ROTULOS_SITUACAO = {
+    regular: "REGULAR",
+    proximo: "PRÓXIMO DO VENCIMENTO",
+    prescrito: "POSSÍVEL PRESCRIÇÃO",
+    indeterminada: "INDETERMINADO"
+  };
+  const CORES_FAIXA = { verde: "var(--verde)", amarelo: "var(--amarelo)", vermelho: "var(--vermelho)" };
+
+  function gerarProtocoloLocal() {
+    const sorteio = Math.floor(1000 + Math.random() * 9000);
+    return "SIM-" + new Date().getFullYear() + "-" + sorteio;
+  }
+
+  function preencherTelemetriaHero(resultado) {
+    let auto = 0, autoMax = 0, decl = 0, declMax = 0;
+    resultado.criterios.forEach(function (c) {
+      if (CRITERIOS_DECLARADOS.indexOf(c.id) !== -1) {
+        declMax += c.pontos;
+        if (c.atendido) decl += c.pontos;
+      } else {
+        autoMax += c.pontos;
+        if (c.atendido) auto += c.pontos;
+      }
+    });
+    function escrever(id, texto) { const el = document.getElementById(id); if (el) el.textContent = texto; }
+    function largura(id, pct) { const el = document.getElementById(id); if (el) el.style.width = pct + "%"; }
+    escrever("hero-tel-tag", "SCORE " + resultado.score + "/100 · " + resultado.faixa.toUpperCase());
+    escrever("hero-tel-auto", auto + " / " + autoMax + " pts");
+    escrever("hero-tel-decl", decl + " / " + declMax + " pts");
+    largura("hero-tel-auto-fill", Math.round((100 * auto) / autoMax));
+    largura("hero-tel-decl-fill", Math.round((100 * decl) / declMax));
+    escrever("hero-tel-prazo", ROTULOS_SITUACAO[resultado.prescricao.situacao]);
+  }
 
   function formatarDataISO(data) {
     const ano = data.getFullYear();
@@ -109,7 +145,7 @@
     const presc = document.getElementById("hero-dossier-presc");
 
     if (badge) {
-      badge.textContent = "Score " + resultado.score + "/100 • Maduro";
+      badge.textContent = "Score " + resultado.score + "/100 • " + (ROTULOS_FAIXA[resultado.faixa] || resultado.faixa);
     }
     if (pct) {
       pct.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
@@ -118,8 +154,9 @@
       fill.style.width = resultado.score + "%";
     }
     if (presc && resultado.prescricao && resultado.prescricao.diasRestantes !== null) {
-      presc.textContent = "Tempestivo (" + resultado.prescricao.diasRestantes + " dias restantes)";
+      presc.textContent = ROTULOS_SITUACAO[resultado.prescricao.situacao] + " (" + resultado.prescricao.diasRestantes + " dias restantes)";
     }
+    preencherTelemetriaHero(resultado);
   }
 
   /* ---------- 2. Histórico Local de Triagens (LGPD) ---------- */
@@ -132,11 +169,11 @@
     }
   }
 
-  function salvarNoHistorico(resultado) {
+  function salvarNoHistorico(resultado, protocolo) {
     try {
       const lista = lerHistorico();
       lista.unshift({
-        protocolo: "#VLT-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000)),
+        protocolo: protocolo || gerarProtocoloLocal(),
         dataHora: new Date().toLocaleString("pt-BR"),
         ramo: NOMES_RAMO[resultado.ramo] || resultado.ramo,
         score: resultado.score,
@@ -227,8 +264,8 @@
       return;
     }
 
-    const codigoProto = "#VLT-2026-" + String(Math.floor(1000 + Math.random() * 9000));
-    if (proto) proto.textContent = "DOSSIÊ PRELIMINAR AUDITÁVEL • " + codigoProto;
+    const codigoProto = gerarProtocoloLocal();
+    if (proto) proto.textContent = "DOSSIÊ PRELIMINAR • ID LOCAL " + codigoProto;
     if (titulo) titulo.textContent = "Triagem: " + (NOMES_RAMO[resultado.ramo] || resultado.ramo);
 
     if (badge) {
@@ -237,7 +274,7 @@
     }
     if (msg) msg.textContent = resultado.mensagem;
     const alertaCritico = document.getElementById("res-alerta-critico");
-    const corFaixa = resultado.faixa === "verde" ? "#16A34A" : resultado.faixa === "amarelo" ? "#D97706" : "#DC2626";
+    const corFaixa = CORES_FAIXA[resultado.faixa];
 
     if (barraTexto) {
       barraTexto.textContent = resultado.score + "% (FAIXA " + resultado.faixa.toUpperCase() + ")";
@@ -274,7 +311,7 @@
         presc.style.fontWeight = "700";
       } else if (resultado.prescricao.diasRestantes !== null) {
         presc.textContent =
-          resultado.prescricao.situacao.toUpperCase() + " (" + resultado.prescricao.diasRestantes + " dias restantes)";
+          ROTULOS_SITUACAO[resultado.prescricao.situacao] + " (" + resultado.prescricao.diasRestantes + " dias restantes)";
         presc.style.color = "#16653B";
         presc.style.fontWeight = "600";
       } else {
@@ -313,7 +350,9 @@
       (resultado.criterios || []).forEach(function (crit) {
         const li = document.createElement("li");
         const s1 = document.createElement("span");
-        s1.textContent = crit.id + ". " + crit.nome + " (" + crit.pontos + " pts)";
+        const declarado = CRITERIOS_DECLARADOS.indexOf(crit.id) !== -1;
+        const origem = declarado ? " — declarado por você" : " — verificado pelo motor";
+        s1.textContent = crit.id + ". " + crit.nome + " (" + crit.pontos + " pts)" + origem;
         const s2 = document.createElement("span");
         s2.className = crit.atendido ? "dossier-tag-ok" : "dossier-tag-pend";
         s2.textContent = crit.atendido ? "[OK]" : "[PENDENTE]";
@@ -323,7 +362,7 @@
       });
     }
 
-    salvarNoHistorico(resultado);
+    salvarNoHistorico(resultado, codigoProto);
   }
 
   function configurarSimulador() {

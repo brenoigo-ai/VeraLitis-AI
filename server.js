@@ -1,32 +1,29 @@
-function contemCpfValido(texto) {
-  const achados = String(texto).match(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g) || [];
-  return achados.some(function (c) {
-    if (/[.-]/.test(c)) return true;
-    const d = c.split("").map(Number);
-    if (new Set(d).size === 1) return false;
-    for (let t = 9; t < 11; t++) {
-      let s = 0;
-      for (let i = 0; i < t; i++) s += d[i] * (t + 1 - i);
-      if (((s * 10) % 11) % 10 !== d[t]) return false;
-    }
-    return true;
-  });
-}
 import "dotenv/config";
 import express from "express";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import { GoogleGenAI, Type } from "@google/genai";
 import { PERSONA, CONHECIMENTO, REGRAS } from "./persona.js";
+
+const require = createRequire(import.meta.url);
+const { contemCpfValido } = require("./js/lgpd.js");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+if (process.env.TRUST_PROXY) app.set("trust proxy", Number(process.env.TRUST_PROXY) || 1);
 app.disable("x-powered-by");
 app.use(express.json({ limit: "10kb" }));
+app.use(function (err, _req, res, next) {
+  if (err instanceof SyntaxError && "body" in err) {
+    return res.status(400).json({ erro: "JSON malformado no corpo da requisição." });
+  }
+  next(err);
+});
 
 /* A.3: Restringe arquivos estaticos apenas ao frontend publico (protege server.js, persona.js, .env e data/) */
 app.get("/", function (req, res) {
@@ -41,7 +38,6 @@ app.use("/assets", express.static(path.join(__dirname, "assets"), { maxAge: "7d"
 
 const MODELO_GEMINI = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const ARQUIVO_PEDIDOS = process.env.PEDIDOS_PATH || path.join(__dirname, "data", "pedidos.json");
-const REGEX_CPF = /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/;
 
 const ai = process.env.GEMINI_API_KEY
   ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
@@ -88,8 +84,8 @@ export function salvarPedido(dados) {
       }
     }
     const novoPedido = {
-      id: pedidos.length + 1,
-      protocolo: dados.protocolo || ("VLT-2026-" + String(1000 + pedidos.length + 1)),
+      id: (pedidos.reduce(function (m, p) { return Math.max(m, Number(p.id) || 0); }, 0) + 1),
+      protocolo: "VLT-" + new Date().getFullYear() + "-" + String(1000 + (pedidos.reduce(function (m, p) { return Math.max(m, Number(p.id) || 0); }, 0) + 1)),
       data: new Date().toLocaleString("pt-BR"),
       nome: String(dados.nome || "").trim().slice(0, 120),
       telefone: String(dados.telefone || dados.contato || "").trim().slice(0, 120),
@@ -192,7 +188,7 @@ app.post("/api/chat", async function (req, res) {
       return res.status(429).json({ erro: "Muitas mensagens em sequência. Aguarde um instante." });
     }
 
-    const mensagem = req.body && req.body.mensagem ? String(req.body.mensagem).trim() : "";
+    const mensagem = (req.body && typeof req.body.mensagem === "string") ? req.body.mensagem.trim() : "";
     let sessionId = req.body ? req.body.sessionId : null;
 
     if (!mensagem) {
@@ -205,7 +201,7 @@ app.post("/api/chat", async function (req, res) {
     /* Bloqueio LGPD no servidor ANTES de enviar ao modelo externo */
     if (contemCpfValido(mensagem)) {
       return res.json({
-        resposta: "ALERTA LGPD (Art. 6º, III - Minimização): Detectei um padrão de CPF na sua mensagem. Por segurança, o número foi bloqueado antes do envio ao modelo externo. Como posso ajudar com os planos ou funcionamento da plataforma?",
+        resposta: "ALERTA LGPD (Art. 6º, III - Minimização): detectei um padrão de CPF na sua mensagem e o número foi bloqueado antes do envio ao modelo externo. Se for um telefone, informe com DDD e hífen, por exemplo (86) 99999-0000. Como posso ajudar com os planos ou o funcionamento da plataforma?",
         sessionId: sessionId
       });
     }
@@ -222,7 +218,8 @@ app.post("/api/chat", async function (req, res) {
           systemInstruction: montarSystemInstruction(),
           tools: [ferramentaRegistrarPedido],
           temperature: 0.3,
-          maxOutputTokens: 1024
+          maxOutputTokens: 1024,
+          thinkingConfig: { thinkingBudget: 0 }
         }
       });
       sessoes.set(sessionId, { chat: chat, ultimoUso: Date.now(), pedidosRegistrados: 0 });

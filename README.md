@@ -108,8 +108,8 @@ A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre 
 ## ⚙️ Funcionalidades Principais
 
 1. **Simulador Determinístico de Viabilidade e Prescrição:** Avalia casos trabalhistas, cíveis, de consumidor e conformidade LGPD com preenchimento rápido de 3 casos reais de demonstração, calculando o *Score de Viabilidade* (0–100), a janela prescricional em meses e emitindo o **Dossiê Preliminar** auditável.
-2. **Vitrine de Módulos (CSS Grid) e Planos SaaS (CSS Flexbox):** Apresentação clara da arquitetura do produto e dos 3 planos de assinatura (*Essencial*, *Profissional* e *Institucional*) com seleção integrada ao formulário comercial.
-3. **Formulário Comercial com Geração de Protocolo:** Validação completa no cliente e no servidor com emissão de protocolo único (`VL-AAAA-XXXX`) e persistência em `data/pedidos.json`.
+2. **Vitrine de Módulos (CSS Grid) e Planos SaaS (CSS Flexbox):** Apresentação clara da arquitetura do produto e dos 3 planos de assinatura (*Advogado Solo*, *Escritório Pro* e *Corporate Jurídico*) com seleção integrada ao formulário comercial.
+3. **Formulário Comercial com Geração de Protocolo:** Validação completa no cliente e no servidor com emissão de protocolo único (`VLT-AAAA-NNNN` no servidor e `SIM-AAAA-NNNN` no modo local) e persistência em `data/pedidos.json`.
 4. **Assistente Virtual VERA (Híbrida: Gemini API + Motor Local):** Chatbot especializado na plataforma VeraLitis AI com suporte a agendamento automatizado de demonstração.
 
 ## 🤖 Arquitetura de Integração com IA (Assistente VERA)
@@ -121,3 +121,8 @@ A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre 
   - *Trava LGPD (Lei nº 13.709/2018):* Algoritmo de validação por Módulo 11 (`contemCpfValido`) que barra o envio de CPFs no chat sem bloquear números de telefone/WhatsApp de 11 dígitos.
   - *Defesa contra Prompt Injection e Rate Limit:* Bloqueio de comandos de subversão de instruções e limite de requisições por IP no servidor.
 - **Resiliência Offline (Fallback Transparente):** Caso o site seja aberto estaticamente (via GitHub Pages ou `index.html`) ou sem chave de API, o widget comuta automaticamente para o motor determinístico local (`js/chat.js`), mantendo 100% das respostas, travas e fluxo de agendamento funcionais.
+
+## Limitações conhecidas e Status do MVP (transparência técnica)
+
+- **Score:** 5 dos 10 critérios (55 pontos) são **declarados pelo usuário** em caixas de seleção; o motor verifica automaticamente relato, data, prazo, aderência à área e dados pessoais (45 pontos). Relato com menos de 25 palavras limita a faixa a vermelha.
+- **Prazos:** o motor soma meses à data informada e **não considera interrupção ou suspensão** (CC, arts. 197 a 204); o resultado é um indício operacional, não uma conclusão jurídica. Trabalhista: informe a data da rescisão. Cível: cobre a reparação extracontratual (3 anos — Art. 206, § 3º, V, CC); pretensões contratuais seguem, em regra, o prazo de 10 anos (Art. 205 do CC / STJ). Consumidor: 5 anos para fato do produto/serviço (Art. 27 do CDC); vício tem decadência própria (Art. 26 do CDC).
