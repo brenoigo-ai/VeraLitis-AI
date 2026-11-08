@@ -4,6 +4,7 @@
   "description": "VeraLitis AI — Plataforma SaaS de Pre-Triagem Juridica Inteligente, Calculo de Risco Prescricional e Compliance LGPD",
   "type": "module",
   "main": "server.js",
+  "engines": { "node": ">=20" },
   "scripts": {
     "start": "node server.js",
     "test": "node --test tests/vera.test.cjs"

@@ -922,8 +922,9 @@ h1, h2, .section-title {
 }
 
 header, .site-header {
-  backdrop-filter: blur(14px) !important;
-  background: rgba(9, 23, 44, 0.90) !important;
+  /* Desempenho: sem backdrop-filter no header fixo (o blur era recalculado a cada rolagem
+     e quase não aparecia com fundo 90% opaco). Fundo 97% opaco mantém o mesmo visual. */
+  background: rgba(9, 23, 44, 0.97) !important;
   border-bottom: 1px solid rgba(212, 175, 55, 0.35) !important;
 }
 
@@ -981,7 +982,8 @@ header, .site-header {
   height: 9px;
   border-radius: 50%;
   background: #22C55E;
-  animation: pulseGlow 2s infinite;
+  /* 2 ciclos (4 s): fica abaixo dos 5 s do WCAG 2.2.2 e não repinta o selo para sempre */
+  animation: pulseGlow 2s 2;
 }
 .hero-telemetry-card {
   position: absolute;
@@ -996,7 +998,8 @@ header, .site-header {
   min-width: 290px;
   border-radius: 4px;
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.6);
-  animation: floatCard 4.5s ease-in-out infinite;
+  /* 1 ciclo só: animar um elemento com backdrop-filter sem parar custa GPU/bateria (e o WCAG 2.2.2 pede movimento < 5 s) */
+  animation: floatCard 4.5s ease-in-out 1;
 }
 .t-bar {
   width: 100%;
@@ -1078,4 +1081,24 @@ button[data-preset]:hover, .preset-btn:hover, .btn-preset:hover {
 /* Garantir legibilidade no banner/diagrama da Secao 03 */
 #modulos svg text {
   fill: #F8FAFC !important;
+}
+
+
+/* === ACESSIBILIDADE: CAMPOS INVÁLIDOS E FOCO PROGRAMÁTICO === */
+/* Campo inválido: borda vermelha + faixa lateral (não depende só da cor: a mensagem de erro aparece no formulário) */
+.form-field input[aria-invalid="true"]:not([type="checkbox"]),
+.form-field select[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
+  border-color: var(--vermelho) !important;
+  border-left: 5px solid var(--vermelho) !important;
+  background: var(--vermelho-bg) !important;
+}
+.form-field input[type="checkbox"][aria-invalid="true"] {
+  outline: 2px solid var(--vermelho);
+  outline-offset: 2px;
+}
+/* Título do resultado e retorno do formulário recebem foco via JS: sem contorno ao clicar com o mouse */
+#res-titulo:focus:not(:focus-visible),
+#contato-feedback:focus:not(:focus-visible) {
+  outline: none;
 }

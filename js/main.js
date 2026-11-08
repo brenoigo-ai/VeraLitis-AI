@@ -8,7 +8,7 @@
   "use strict";
 
   const STORAGE_HISTORICO = "veralitis_historico_triagens_v1";
-  const STORAGE_PEDIDOS_ANTIGO = "veralitis_pedidos_comerciais_v1";
+  const STORAGE_PEDIDOS = "veralitis_pedidos_comerciais_v1";
 
   const NOMES_RAMO = {
     trabalhista: "Trabalhista (CLT)",
@@ -30,6 +30,20 @@
   function gerarProtocoloLocal() {
     const sorteio = Math.floor(1000 + Math.random() * 9000);
     return "SIM-" + new Date().getFullYear() + "-" + sorteio;
+  }
+
+  /* Acessibilidade: fala um resumo curto no leitor de tela via região role="status" (#anuncio-status).
+     Limpa antes de escrever para que a mesma frase repetida também seja anunciada. */
+  function anunciar(texto) {
+    const regiao = document.getElementById("anuncio-status");
+    if (!regiao) return;
+    regiao.textContent = "";
+    setTimeout(function () { regiao.textContent = texto; }, 60);
+  }
+
+  /* Leva o foco (e a rolagem) até o elemento, para quem navega por teclado ver o resultado. */
+  function focarElemento(el) {
+    if (el && typeof el.focus === "function") el.focus();
   }
 
   function preencherTelemetriaHero(resultado) {
@@ -61,8 +75,11 @@
   }
 
   function dataMesesAtras(meses) {
-    const d = new Date();
-    d.setMonth(d.getMonth() - meses);
+    /* Evita estouro de mês (ex.: 31/out - 4 meses viraria 1/jul em vez de 30/jun). */
+    const hoje = new Date();
+    const d = new Date(hoje.getFullYear(), hoje.getMonth() - meses, 1);
+    const ultimoDia = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(hoje.getDate(), ultimoDia));
     return formatarDataISO(d);
   }
 
@@ -261,6 +278,8 @@
         badge.textContent = "Erro de Validação";
       }
       if (msg) msg.textContent = resultado.erro;
+      focarElemento(titulo);
+      anunciar("Entrada inválida: " + resultado.erro);
       return;
     }
 
@@ -363,6 +382,15 @@
     }
 
     salvarNoHistorico(resultado, codigoProto);
+
+    focarElemento(titulo);
+    const avisoPrescricao = resultado.prescricao && resultado.prescricao.situacao === "prescrito"
+      ? " Atenção: possível prescrição."
+      : "";
+    anunciar(
+      "Análise concluída. Score " + resultado.score + " de 100, faixa " +
+      resultado.faixa + "." + avisoPrescricao + " " + (resultado.mensagem || "")
+    );
   }
 
   function configurarSimulador() {
@@ -446,6 +474,7 @@
           localStorage.removeItem(STORAGE_HISTORICO);
         } catch (_) {}
         renderizarHistorico();
+        anunciar("Histórico local de triagens apagado.");
       });
     }
 
@@ -505,15 +534,39 @@
 
       const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-      if (!nome || !registro || !emailValido || telefone.length < 8 || volume < 1 || !lgpdOk) {
+      /* Acessibilidade: marca cada campo inválido (aria-invalid) e leva o foco ao primeiro deles. */
+      const verificacoes = [
+        ["contato-nome", Boolean(nome)],
+        ["contato-registro", Boolean(registro)],
+        ["contato-email", emailValido],
+        ["contato-telefone", telefone.length >= 8],
+        ["contato-volume", volume >= 1],
+        ["contato-lgpd", lgpdOk]
+      ];
+      let primeiroInvalido = null;
+      verificacoes.forEach(function (v) {
+        const campo = document.getElementById(v[0]);
+        if (!campo) return;
+        if (v[1]) {
+          campo.removeAttribute("aria-invalid");
+        } else {
+          campo.setAttribute("aria-invalid", "true");
+          if (!primeiroInvalido) primeiroInvalido = campo;
+        }
+      });
+
+      if (primeiroInvalido) {
         feedback.hidden = false;
         feedback.className = "legal-notice-bar";
         feedback.textContent =
           "⚠️ Preencha todos os campos obrigatórios com um e-mail comercial válido, telefone institucional e marque o consentimento LGPD.";
+        focarElemento(primeiroInvalido);
+        anunciar("Formulário com campos pendentes. " + feedback.textContent);
         return;
       }
 
-      const protocolo = "#VLT-2026-" + String(Math.floor(1000 + Math.random() * 9000));
+      /* Protocolo local (modo estático). Se o servidor gravar o pedido, o protocolo oficial dele substitui este. */
+      let protocolo = "#SIM-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000));
       let gravadoServidor = false;
 
       try {
@@ -527,12 +580,18 @@
             plano: plano,
             volume: volume,
             modalidade: modalidade,
-            protocolo: protocolo
+            consentimentoLgpd: lgpdOk
           })
         });
         gravadoServidor = resp.ok;
+        if (resp.ok) {
+          const dadosResp = await resp.json();
+          if (dadosResp && dadosResp.pedido && dadosResp.pedido.protocolo) {
+            protocolo = "#" + dadosResp.pedido.protocolo;
+          }
+        }
       } catch (_) {
-        gravadoServidor = false;
+        /* servidor indisponível: mantém o protocolo local e o aviso de modo estático */
       }
 
       try {
@@ -577,6 +636,8 @@
       feedback.appendChild(titulo);
       feedback.appendChild(detalhe);
       feedback.appendChild(modoNota);
+      focarElemento(feedback);
+      anunciar("Solicitação registrada. Protocolo " + protocolo + ".");
     });
   }
 

@@ -159,6 +159,9 @@ function analisarCaso(entrada, hoje) {
   }
 
   const referencia = interpretarData(hoje || new Date());
+  if (!referencia) {
+    return { erro: "Data de referência inválida (use AAAA-MM-DD ou um objeto Date)." };
+  }
   const fato = interpretarData(dados.dataFato);
   if (fato && fato.getTime() > referencia.getTime()) {
     return { erro: "A data do fato não pode ser posterior à data atual." };

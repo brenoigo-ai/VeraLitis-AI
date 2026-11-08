@@ -36,12 +36,14 @@ app.use("/css", express.static(path.join(__dirname, "css"), { maxAge: "7d" }));
 app.use("/js", express.static(path.join(__dirname, "js"), { maxAge: "7d" }));
 app.use("/assets", express.static(path.join(__dirname, "assets"), { maxAge: "7d" }));
 
-const MODELO_GEMINI = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const MODELO_GEMINI = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 const ARQUIVO_PEDIDOS = process.env.PEDIDOS_PATH || path.join(__dirname, "data", "pedidos.json");
 
 const ai = process.env.GEMINI_API_KEY
   ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
   : null;
+
+const PLANOS_VALIDOS = ["solo", "pro", "corporate"];
 
 const sessoes = new Map();
 const janelaRequisicoesIp = new Map();
@@ -52,6 +54,12 @@ setInterval(function () {
   for (const [id, sessao] of sessoes.entries()) {
     if (agora - sessao.ultimoUso > 30 * 60 * 1000) {
       sessoes.delete(id);
+    }
+  }
+  /* Evita crescimento infinito do mapa de rate limit (uma entrada por IP já visto) */
+  for (const [ip, registro] of janelaRequisicoesIp.entries()) {
+    if (agora - registro.inicio > 60000) {
+      janelaRequisicoesIp.delete(ip);
     }
   }
 }, 5 * 60 * 1000).unref();
@@ -83,21 +91,27 @@ export function salvarPedido(dados) {
         pedidos = [];
       }
     }
+    const proximoId = pedidos.reduce(function (m, p) { return Math.max(m, Number(p.id) || 0); }, 0) + 1;
     const novoPedido = {
-      id: (pedidos.reduce(function (m, p) { return Math.max(m, Number(p.id) || 0); }, 0) + 1),
-      protocolo: "VLT-" + new Date().getFullYear() + "-" + String(1000 + (pedidos.reduce(function (m, p) { return Math.max(m, Number(p.id) || 0); }, 0) + 1)),
+      id: proximoId,
+      protocolo: "VLT-" + new Date().getFullYear() + "-" + String(1000 + proximoId),
       data: new Date().toLocaleString("pt-BR"),
       nome: String(dados.nome || "").trim().slice(0, 120),
       telefone: String(dados.telefone || dados.contato || "").trim().slice(0, 120),
-      pedido: String(dados.pedido || dados.plano || "pro").trim().slice(0, 120)
+      pedido: String(dados.pedido || dados.plano || "pro").trim().slice(0, 120),
+      registro: String(dados.registro || "").trim().slice(0, 60),
+      volume: Number(dados.volume) || null,
+      consentimentoLgpd: dados.consentimentoLgpd === true
     };
     pedidos.push(novoPedido);
-    fs.writeFileSync(ARQUIVO_PEDIDOS, JSON.stringify(pedidos.slice(-100), null, 2));
+    /* Sem .slice(-100): cortar a lista apagava silenciosamente leads antigos. */
+    fs.writeFileSync(ARQUIVO_PEDIDOS, JSON.stringify(pedidos, null, 2));
     return novoPedido;
   } catch (err) {
+    console.error("Falha ao gravar pedido em disco:", err.message);
     return {
       id: 0,
-      protocolo: "VLT-2026-" + String(Math.floor(1000 + Math.random() * 9000)),
+      protocolo: "VLT-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 9000)),
       data: new Date().toLocaleString("pt-BR"),
       nome: String(dados.nome || "").trim(),
       telefone: String(dados.telefone || dados.contato || "").trim(),
@@ -126,9 +140,13 @@ const ferramentaRegistrarPedido = {
           pedido: {
             type: Type.STRING,
             description: "Plano escolhido (Advogado Solo, Escritório Pro ou Corporate) e observações"
+          },
+          consentimento_confirmado: {
+            type: Type.BOOLEAN,
+            description: "true somente se o usuário disse expressamente que concorda com o uso dos dados exclusivamente para contato comercial"
           }
         },
-        required: ["nome", "telefone", "pedido"]
+        required: ["nome", "telefone", "pedido", "consentimento_confirmado"]
       }
     }
   ]
@@ -172,11 +190,19 @@ app.post("/api/pedidos", function (req, res) {
   if (!nome || !contato || !plano) {
     return res.status(400).json({ erro: "Campos obrigatórios ausentes (nome, contato e plano)." });
   }
+  if (corpo.consentimentoLgpd !== true) {
+    return res.status(400).json({ erro: "Consentimento LGPD obrigatório para registrar a solicitação." });
+  }
+  if (!PLANOS_VALIDOS.includes(plano.toLowerCase())) {
+    return res.status(400).json({ erro: "Plano inválido. Use solo, pro ou corporate." });
+  }
   const salvo = salvarPedido({
     nome: nome,
     telefone: contato,
-    pedido: plano + (corpo.modalidade ? " - " + corpo.modalidade : ""),
-    protocolo: corpo.protocolo
+    pedido: plano + (corpo.modalidade ? " - " + String(corpo.modalidade).slice(0, 80) : ""),
+    registro: corpo.registro,
+    volume: corpo.volume,
+    consentimentoLgpd: true
   });
   return res.status(201).json({ ok: true, pedido: salvo });
 });
@@ -219,7 +245,8 @@ app.post("/api/chat", async function (req, res) {
           tools: [ferramentaRegistrarPedido],
           temperature: 0.3,
           maxOutputTokens: 1024,
-          thinkingConfig: { thinkingBudget: 0 }
+          /* thinkingBudget: 0 é específico da família 2.5; modelos 3.x usam outro controle (thinkingLevel). */
+          ...(MODELO_GEMINI.includes("2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : {})
         }
       });
       sessoes.set(sessionId, { chat: chat, ultimoUso: Date.now(), pedidosRegistrados: 0 });
@@ -239,14 +266,20 @@ app.post("/api/chat", async function (req, res) {
       for (let i = 0; i < resposta.functionCalls.length; i += 1) {
         const chamada = resposta.functionCalls[i];
         if (chamada.name === "registrar_pedido") {
-          if (sessao.pedidosRegistrados >= 2) {
+          if (!chamada.args || chamada.args.consentimento_confirmado !== true) {
+            retornosFuncoes.push({
+              functionResponse: { id: chamada.id, name: chamada.name,
+                response: { sucesso: false, erro: "Consentimento LGPD não confirmado. Peça a concordância expressa do usuário antes de registrar." }
+              }
+            });
+          } else if (sessao.pedidosRegistrados >= 2) {
             retornosFuncoes.push({
               functionResponse: { id: chamada.id, name: chamada.name,
                 response: { sucesso: false, erro: "Limite de pedidos por sessão atingido." }
               }
             });
           } else {
-            const pedidoSalvo = salvarPedido(chamada.args || {});
+            const pedidoSalvo = salvarPedido(Object.assign({}, chamada.args, { consentimentoLgpd: true }));
             sessao.pedidosRegistrados += 1;
             retornosFuncoes.push({
               functionResponse: { id: chamada.id, name: chamada.name,

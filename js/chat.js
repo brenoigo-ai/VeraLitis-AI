@@ -38,11 +38,66 @@
     estadoAgendamentoGlobal = criarEstadoAgendamentoInicial();
   }
 
+  function normalizar(texto) {
+    return String(texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  const RESPOSTA_INJECTION =
+    "Solicitação recusada pelas diretrizes de governança da VeraLitis AI (inspiradas na Resolução CNJ nº 615/2025). " +
+    "Não compartilho instruções internas nem altero minhas regras éticas. Posso explicar nossos módulos de triagem ou planos SaaS?";
+
+  const RESPOSTA_OAB =
+    "Em respeito ao Estatuto da OAB (Lei nº 8.906/1994), a VeraLitis AI realiza exclusivamente triagem operacional e " +
+    "documental preliminar. Não emitimos juízo de certeza sobre êxito processual, não redigimos peças judiciais nem " +
+    "substituímos a consulta com advogado habilitado. Deseja testar a admissibilidade documental no Simulador (§02)?";
+
+  /* Trava Anti-Injection (usa \bmodo dan\b para não bloquear 'Jordan Plaza' nem 'Dan Advogados') */
+  const PADROES_INJECTION = [
+    /\bignor\w* (as |todas as |suas |minhas |essas |)(instrucoes|regras|diretrizes)/,
+    /\bignore (all |the |your )?(previous |prior |above )?(instructions|rules)\b/,
+    /\besquec\w* (as |todas as |suas |)(instrucoes|regras|diretrizes)/,
+    /\b(revele|mostre|repita|imprima|exiba)\b.{0,20}\b(suas instrucoes|instrucoes internas|seu prompt|o prompt|regras internas|sua configuracao)\b/,
+    /\bsystem prompt\b|\bprompt de sistema\b|\bprompt do sistema\b/,
+    /\bchave de api\b|\bapi[_ ]?key\b/,
+    /\bmodo desenvolvedor\b|\bdeveloper mode\b|\bjailbreak\b/,
+    /\bmodo dan\b|\bdo anything now\b/,
+    /\baja como\b|\bfinja (ser|que)\b|\bvoce agora e\b/
+  ];
+
+  /* Trava Ética OAB (Lei 8.906/1994): parecer individualizado, promessa de resultado ou redação de peças */
+  const PADROES_OAB = [
+    /\bcausa (e |esta |ja e )?(ganha|perdida)\b/,
+    /\bvou (ganhar|perder)\b/,
+    /\bchances? de (ganhar|exito|vitoria|sucesso)\b/,
+    /\bganhar (a causa|o processo|a acao)\b/,
+    /\b(redija|redigir|escreva|escrever|faca|fazer|elabore|elaborar|monte|montar)\b.{0,25}\b(peticao|contestacao|recurso|peca|procuracao|notificacao extrajudicial)\b/,
+    /\bparecer juridico\b/,
+    /\btenho direito\b/,
+    /\b(devo|posso|vale a pena) (processar|entrar com|ajuizar|acionar)\b/,
+    /\bqual (e )?o meu prazo\b/
+  ];
+
+  /**
+   * Travas determinísticas compartilhadas entre o widget (navegador) e o server.js (antes do Gemini).
+   * @returns {{tipo: "injection"|"oab", resposta: string} | null}
+   */
+  function verificarTravas(mensagem) {
+    const norm = normalizar(mensagem);
+    if (!norm.trim()) return null;
+    if (PADROES_INJECTION.some(function (re) { return re.test(norm); })) {
+      return { tipo: "injection", resposta: RESPOSTA_INJECTION };
+    }
+    if (PADROES_OAB.some(function (re) { return re.test(norm); })) {
+      return { tipo: "oab", resposta: RESPOSTA_OAB };
+    }
+    return null;
+  }
+
   /* Motor local de contingencia (sincronizado com persona.js e exportavel para testes) */
   function responderLocalmente(mensagemBruta, estadoCustom) {
     const estado = estadoCustom || estadoAgendamentoGlobal;
     const texto = String(mensagemBruta || "").trim();
-    const norm = texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const norm = normalizar(texto);
 
     if (!texto) {
       return "Por favor, digite sua dúvida sobre o simulador, módulos técnicos, planos SaaS ou agendamento de demonstração.";
@@ -63,34 +118,10 @@
       return "Tudo bem, cancelei a solicitação de agendamento. Posso ajudar com informações sobre o simulador de triagem ou nossos planos Solo, Pro e Corporate?";
     }
 
-    /* 3. Trava Anti-Injection e protecao de System Prompt (usa \bdan\b para nao bloquear 'Jordan Plaza') */
-    if (
-      norm.includes("ignore as instrucoes") ||
-      norm.includes("ignore todas as regras") ||
-      norm.includes("system prompt") ||
-      norm.includes("prompt de sistema") ||
-      norm.includes("chave de api") ||
-      norm.includes("api_key") ||
-      norm.includes("modo desenvolvedor") ||
-      norm.includes("jailbreak") ||
-      /\bdan\b/.test(norm) ||
-      norm.includes("aja como")
-    ) {
-      return "Solicitação recusada pelas diretrizes de governança da VeraLitis AI (inspiradas na Resolução CNJ nº 615/2025). Não compartilho instruções internas nem altero minhas regras éticas. Posso explicar nossos módulos de triagem ou planos SaaS?";
-    }
-
-    /* 4. Trava Etica OAB (Lei 8.906/1994): Proibicao de parecer vinculante ou redacao de pecas */
-    if (
-      norm.includes("causa ganha") ||
-      norm.includes("vou ganhar") ||
-      norm.includes("chance de ganhar") ||
-      norm.includes("redija uma peticao") ||
-      norm.includes("escreva uma peticao") ||
-      norm.includes("faca uma peticao") ||
-      norm.includes("elaborar peticao") ||
-      norm.includes("parecer juridico")
-    ) {
-      return "Em respeito ao Estatuto da OAB (Lei nº 8.906/1994), a VeraLitis AI realiza exclusivamente triagem operacional e documental preliminar. Não emitimos juízo de certeza sobre êxito processual, não redigimos peças judiciais nem substituímos a consulta com advogado habilitado. Deseja testar a admissibilidade documental no Simulador (§02)?";
+    /* 3 e 4. Travas Anti-Injection (Res. CNJ 615/2025) e Ética OAB (Lei 8.906/1994) — mesma regra usada no server.js */
+    const trava = verificarTravas(texto);
+    if (trava) {
+      return trava.resposta;
     }
 
     /* 5. Fluxo guiado de agendamento de demonstracao com validacao estrita */
@@ -178,7 +209,7 @@
       norm.includes("criterio") ||
       norm.includes("como funciona") ||
       norm.includes("calculo") ||
-      norm.includes("tpu")
+      /\btpu\b/.test(norm)
     ) {
       return (
         "O Simulador (§02 #simulador) avalia 10 critérios inspirados no art. 319 do CPC (5 verificados pelo " +
@@ -245,17 +276,17 @@
       '  <header class="vera-header">',
       '    <div>',
       '      <strong class="vera-header__title">VERA &bull; Consultora Virtual</strong>',
-      '      <span class="vera-header__sub" id="vera-mode-badge">Modo offline &bull; Respostas roteirizadas</span>',
+      '      <span class="vera-header__sub" id="vera-mode-badge" data-modo="verificando" aria-live="polite">Verificando conexão &bull; aguarde</span>',
       '    </div>',
       '    <button id="chat-close" class="vera-close" type="button" aria-label="Fechar chat">&times;</button>',
       '  </header>',
-      '  <div class="vera-chips" aria-label="Sugestões rápidas">',
+      '  <div class="vera-chips" role="group" aria-label="Sugestões rápidas">',
       '    <button type="button" class="vera-chip" data-pergunta="Quais são os planos e preços?">Planos e preços</button>',
       '    <button type="button" class="vera-chip" data-pergunta="Como funciona o cálculo do score e prescrição?">Como funciona o score?</button>',
       '    <button type="button" class="vera-chip" data-pergunta="Como vocês garantem a conformidade com a OAB e a LGPD?">Travas OAB &amp; LGPD</button>',
       '    <button type="button" class="vera-chip" data-pergunta="Quero agendar uma demonstração">Agendar demo</button>',
       '  </div>',
-      '  <div id="vera-chat-box" class="vera-messages" aria-live="polite"></div>',
+      '  <div id="vera-chat-box" class="vera-messages" role="log" aria-live="polite" aria-label="Conversa com a VERA"></div>',
       '  <div class="vera-input-area">',
       '    <label for="vera-input" class="visually-hidden">Digite sua dúvida para a VERA</label>',
       '    <input id="vera-input" type="text" maxlength="500" placeholder="Pergunte sobre planos, score ou LGPD..." autocomplete="off" />',
@@ -291,24 +322,32 @@
       return linha;
     }
 
+    /* Selo de modo: "ia" (Gemini via servidor) ou "offline" (motor roteirizado local). */
+    function definirModo(modo, modelo) {
+      modoServidor = modo;
+      if (!badgeModo) return;
+      badgeModo.setAttribute("data-modo", modo);
+      badgeModo.textContent = modo === "ia"
+        ? "IA generativa \u00b7 Gemini (" + (modelo || "Ativo") + ")"
+        : "Modo offline \u00b7 Respostas roteirizadas";
+    }
+
     async function detectarModo() {
       ultimaChecagem = Date.now();
       try {
         const ctrl = new AbortController();
         const timer = setTimeout(function () { ctrl.abort(); }, 4000);
-        const r = await fetch("/api/health", { signal: ctrl.signal });
+        const r = await fetch("/api/health", { signal: ctrl.signal, cache: "no-store" });
         clearTimeout(timer);
         if (r.ok) {
           const dados = await r.json();
           if (dados && dados.ok) {
-            modoServidor = "ia";
-            if (badgeModo) badgeModo.textContent = "IA generativa · Gemini (" + (dados.modelo || "Ativo") + ")";
+            definirModo("ia", dados.modelo);
             return;
           }
         }
       } catch (_) {}
-      modoServidor = "offline";
-      if (badgeModo) badgeModo.textContent = "Modo offline · Respostas roteirizadas";
+      definirModo("offline");
     }
 
     async function enviarMensagem(textoForcado) {
@@ -316,52 +355,68 @@
       const mensagem = typeof textoForcado === "string" ? textoForcado.trim() : input.value.trim();
       if (!mensagem) return;
 
-      input.value = "";
-
-      if (modoServidor !== "ia" && Date.now() - ultimaChecagem > 10000) {
-        await detectarModo();
-      }
-
-      const estado = estadoAgendamentoGlobal;
-      const aguardandoContato = modoServidor !== "ia" && estado.ativo && Boolean(estado.nome) && !estado.contato;
-      if (contemCpfValido(mensagem) && !(aguardandoContato && pareceCelularBR(mensagem))) {
-        adicionarMensagem("Você", "[mensagem ocultada: contém padrão de CPF]", "vera-msg--user");
-        adicionarMensagem("VERA", AVISO_CPF, "vera-msg--bot");
-        return;
-      }
-
-      adicionarMensagem("Você", mensagem, "vera-msg--user");
-
-      if (modoServidor !== "ia") {
-        const respostaOffline = responderLocalmente(mensagem);
-        adicionarMensagem("VERA", respostaOffline, "vera-msg--bot");
-        return;
-      }
-
       enviando = true;
       btnEnviar.disabled = true;
-      const linhaCarregando = adicionarMensagem("VERA", "Consultando base normativa...", "vera-msg--bot");
+      input.value = "";
 
       try {
-        const ctrl = new AbortController();
-        const timer = setTimeout(function () { ctrl.abort(); }, 25000);
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mensagem: mensagem, sessionId: sessionId }),
-          signal: ctrl.signal
-        });
-        clearTimeout(timer);
+        if (modoServidor !== "ia" && Date.now() - ultimaChecagem > 10000) {
+          await detectarModo();
+        }
 
-        if (!res.ok) throw new Error("Fallback local");
-        const dados = await res.json();
-        sessionId = dados.sessionId || sessionId;
-        linhaCarregando.querySelector("span").textContent = dados.resposta;
-      } catch (_) {
-        modoServidor = "offline";
-        if (badgeModo) badgeModo.textContent = "Modo offline \u00b7 Respostas roteirizadas";
-        const respostaContingencia = responderLocalmente(mensagem);
-        linhaCarregando.querySelector("span").textContent = respostaContingencia;
+        const estado = estadoAgendamentoGlobal;
+        const aguardandoContato = modoServidor !== "ia" && estado.ativo && Boolean(estado.nome) && !estado.contato;
+        if (contemCpfValido(mensagem) && !(aguardandoContato && pareceCelularBR(mensagem))) {
+          adicionarMensagem("Você", "[mensagem ocultada: contém padrão de CPF]", "vera-msg--user");
+          adicionarMensagem("VERA", AVISO_CPF, "vera-msg--bot");
+          return;
+        }
+
+        adicionarMensagem("Você", mensagem, "vera-msg--user");
+
+        if (modoServidor !== "ia") {
+          adicionarMensagem("VERA", responderLocalmente(mensagem), "vera-msg--bot");
+          return;
+        }
+
+        /* Travas OAB/Anti-Injection resolvidas no próprio navegador: resposta imediata e nada vai ao modelo. */
+        const trava = verificarTravas(mensagem);
+        if (trava) {
+          adicionarMensagem("VERA", trava.resposta, "vera-msg--bot");
+          return;
+        }
+
+        const linhaCarregando = adicionarMensagem("VERA", "Consultando base normativa...", "vera-msg--bot");
+        const corpoResposta = linhaCarregando.querySelector("span");
+        chatBox.setAttribute("aria-busy", "true");
+
+        try {
+          const ctrl = new AbortController();
+          const timer = setTimeout(function () { ctrl.abort(); }, 25000);
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mensagem: mensagem, sessionId: sessionId }),
+            signal: ctrl.signal
+          });
+          clearTimeout(timer);
+
+          /* 429 (limite) e 400 (entrada inválida) não significam servidor fora do ar: mantém o modo IA. */
+          if (res.status === 429 || res.status === 400) {
+            const erro = await res.json().catch(function () { return {}; });
+            corpoResposta.textContent = (erro && erro.erro) || "Não foi possível enviar agora. Tente novamente em instantes.";
+            return;
+          }
+          if (!res.ok) throw new Error("Fallback local");
+          const dados = await res.json();
+          sessionId = dados.sessionId || sessionId;
+          corpoResposta.textContent = dados.resposta;
+        } catch (_) {
+          definirModo("offline");
+          corpoResposta.textContent = responderLocalmente(mensagem);
+        } finally {
+          chatBox.removeAttribute("aria-busy");
+        }
       } finally {
         enviando = false;
         btnEnviar.disabled = false;
@@ -430,6 +485,9 @@
 
   return {
     responderLocalmente: responderLocalmente,
-    resetarEstadoAgendamento: resetarEstadoAgendamento
+    resetarEstadoAgendamento: resetarEstadoAgendamento,
+    verificarTravas: verificarTravas,
+    contatoValido: contatoValido,
+    AVISO_CPF: AVISO_CPF
   };
 });

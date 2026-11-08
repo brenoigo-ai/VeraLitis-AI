@@ -71,7 +71,7 @@ A aplicação foi desenhada com **degradação graciosa**. Você pode abrir o ar
     # Edite o arquivo .env e insira sua GEMINI_API_KEY
     npm start
 
-Acesse `http://localhost:3000`. O widget da VERA detectará o endpoint `/api/health` ativo e exibirá o selo **"IA generativa · Gemini (gemini-2.5-flash)"**, habilitando Function Calling na ferramenta `registrar_pedido`.
+Acesse `http://localhost:3000`. O widget da VERA detectará o endpoint `/api/health` ativo e exibirá o selo **"IA generativa · Gemini (gemini-3.8-flash)"**, habilitando Function Calling na ferramenta `registrar_pedido`.
 
 ---
 
@@ -81,14 +81,14 @@ Acesse `http://localhost:3000`. O widget da VERA detectará o endpoint `/api/hea
 
     npm test
 
-A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre `js/scoring.js`, `js/chat.js` e a coerência de preços/normas entre `index.html`, `persona.js` e `js/chat.js`.
+A suíte `tests/vera.test.cjs` executa 14 baterias de verificação reais sobre `js/scoring.js`, `js/chat.js` e a coerência de preços/normas entre `index.html`, `persona.js` e `js/chat.js`.
 
 ### 5.2. Roteiro de 5 Prompts para Avaliar a VERA na Interface
 1. **Planos e Preços:** "Quais são os planos e preços?" -> Lista Solo (R$ 190/mês), Escritório Pro (R$ 590/mês) e Corporate (R$ 1.490/mês).
 2. **Explicação do Motor:** "Como funciona o cálculo do score e prescrição?" -> Explica os 10 critérios do Art. 319 do CPC e os prazos de 24m (CLT), 60m (CDC) e 36m (CC/LGPD).
 3. **Trava Ética OAB:** "Essa causa é ganha? Redija uma petição inicial para mim." -> Recusa parecer vinculante ou redação de peça citando a Lei nº 8.906/1994.
 4. **Trava LGPD (Bloqueio de CPF):** "Meu CPF é 123.456.789-00, avalie meu caso." -> Bloqueia o envio localmente e exibe alerta de minimização (Art. 6º, III da LGPD).
-5. **Fluxo de Agendamento Validado:** "Quero agendar uma demonstração" -> Solicita nome, valida formato de e-mail/telefone, confirma o plano (Solo, Pro ou Corporate) e gera protocolo #VLT-2026-XXXX (ou permite digitar "cancelar").
+5. **Fluxo de Agendamento Validado:** "Quero agendar uma demonstração" -> Solicita nome, valida formato de e-mail/telefone, confirma o plano (Solo, Pro ou Corporate) e gera protocolo SIM-AAAA-XXXX no modo offline (ou permite digitar "cancelar").
 
 ---
 
@@ -103,7 +103,7 @@ A suíte `tests/vera.test.cjs` executa 11 baterias de verificação reais sobre 
 - **Front-End & UI Editorial:** HTML5 Semântico (WCAG 2.1 AA), CSS3 Custom Properties, **CSS Grid Layout** (módulos de arquitetura) e **CSS Flexbox** (cards de planos SaaS), fotografia otimizada em **WebP** (`assets/img/hero-editorial.webp`) e fontes auto-hospedadas (`css/fonts/` — zero vazamento de IP para terceiros em conformidade com a LGPD).
 - **Motor de Triagem Determinístico:** JavaScript ES6+ puro e isomórfico (`js/scoring.js`), sem dependências externas, garantindo reprodutibilidade matemática de 0 a 100 pontos.
 - **Back-End & Integração com IA:** Node.js (v20+), Express, SDK oficial `@google/genai` (Google Gemini API) e `dotenv`.
-- **Qualidade & Auditoria:** Suíte de testes unitários automatizados via `node:test` (`tests/vera.test.cjs` com 11 asserções cobrindo cálculo de score, prazos prescricionais e travas éticas).
+- **Qualidade & Auditoria:** Suíte de testes unitários automatizados via `node:test` (`tests/vera.test.cjs` com 14 testes cobrindo cálculo de score, prazos prescricionais e travas éticas).
 
 ## ⚙️ Funcionalidades Principais
 

@@ -204,3 +204,32 @@ test("scoring.js: relato curto limita a faixa a vermelho, mesmo com tudo marcado
   assert.equal(r.relatoSuficiente, false);
   assert.equal(r.faixa, "vermelho");
 });
+
+/* =============================================================
+   4. REGRESSOES DE BUGS CORRIGIDOS NA REVISAO
+   ============================================================= */
+
+test("chat.js: trava OAB tambem pega 'essa causa e ganha?' e 'chance de exito' sem pedir peticao", function () {
+  for (const frase of ["Essa causa é ganha?", "Qual a chance de êxito no meu caso?", "Vou perder o processo?"]) {
+    resetarEstadoAgendamento();
+    assert.match(responderLocalmente(frase), /8\.906\/1994/, frase);
+  }
+});
+
+test("chat.js: nome 'Dan Advogados' nao e confundido com jailbreak e 'output' nao dispara a resposta do simulador", function () {
+  resetarEstadoAgendamento();
+  responderLocalmente("Quero agendar uma demonstração");
+  assert.match(responderLocalmente("Dan Advogados Associados"), /telefone|e-mail/i);
+  resetarEstadoAgendamento();
+  assert.doesNotMatch(responderLocalmente("o output do sistema"), /Simulador \(§02/);
+});
+
+test("scoring.js: data de referencia invalida retorna erro em vez de lancar excecao", function () {
+  const r = analisarCaso({ ramo: "civel", dataFato: "2026-01-01", relato: "x" }, "lixo");
+  assert.ok(r.erro);
+});
+
+test("main.js: STORAGE_PEDIDOS esta definida (antes lancava ReferenceError engolido pelo try/catch)", function () {
+  const main = fs.readFileSync(path.resolve(__dirname, "..", "js", "main.js"), "utf8");
+  assert.match(main, /const STORAGE_PEDIDOS\s*=/);
+});
