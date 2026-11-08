@@ -10,6 +10,7 @@ import { PERSONA, CONHECIMENTO, REGRAS } from "./persona.js";
 
 const require = createRequire(import.meta.url);
 const { contemCpfValido } = require("./js/lgpd.js");
+const { verificarTravas } = require("./js/chat.js");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -230,6 +231,13 @@ app.post("/api/chat", async function (req, res) {
         resposta: "ALERTA LGPD (Art. 6º, III - Minimização): detectei um padrão de CPF na sua mensagem e o número foi bloqueado antes do envio ao modelo externo. Se for um telefone, informe com DDD e hífen, por exemplo (86) 99999-0000. Como posso ajudar com os planos ou o funcionamento da plataforma?",
         sessionId: sessionId
       });
+    }
+
+    /* Travas OAB e Anti-Injection no servidor (mesma regra do widget): quem chamar a API direto não as contorna,
+       e a recusa é determinística, sem gastar chamada ao Gemini. */
+    const trava = verificarTravas(mensagem);
+    if (trava) {
+      return res.json({ resposta: trava.resposta, sessionId: sessionId });
     }
 
     if (!ai) {

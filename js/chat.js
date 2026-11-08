@@ -55,40 +55,45 @@
   const PADROES_INJECTION = [
     /\bignor\w* (as |todas as |suas |minhas |essas |)(instrucoes|regras|diretrizes)/,
     /\bignore (all |the |your )?(previous |prior |above )?(instructions|rules)\b/,
-    /\besquec\w* (as |todas as |suas |)(instrucoes|regras|diretrizes)/,
-    /\b(revele|mostre|repita|imprima|exiba)\b.{0,20}\b(suas instrucoes|instrucoes internas|seu prompt|o prompt|regras internas|sua configuracao)\b/,
+    /\b(esqueca|esquecer|desconsidere|desconsiderar|desobedeca|despreze|desprezar) (as |todas as |suas |minhas |essas |)(instrucoes|regras|diretrizes)/,
+    /\b(revele|mostre|repita|imprima|exiba|me de|me diga|quais sao)\b.{0,25}\b(suas instrucoes|instrucoes internas|seu prompt|o prompt|regras internas|sua configuracao|regras que voce segue)\b/,
     /\bsystem prompt\b|\bprompt de sistema\b|\bprompt do sistema\b/,
     /\bchave de api\b|\bapi[_ ]?key\b/,
     /\bmodo desenvolvedor\b|\bdeveloper mode\b|\bjailbreak\b/,
-    /\bmodo dan\b|\bdo anything now\b/,
-    /\baja como\b|\bfinja (ser|que)\b|\bvoce agora e\b/
+    /\bdan\b/,
+    /\baja como\b/
   ];
 
-  /* Trava Ética OAB (Lei 8.906/1994): parecer individualizado, promessa de resultado ou redação de peças */
   const PADROES_OAB = [
     /\bcausa (e |esta |ja e )?(ganha|perdida)\b/,
     /\bvou (ganhar|perder)\b/,
-    /\bchances? de (ganhar|exito|vitoria|sucesso)\b/,
+    /\bchances? de (ganhar|exito|vitoria)\b/,
+    /\bchances? de sucesso\b.{0,25}\b(processo|causa|acao|caso|recurso)\b/,
     /\bganhar (a causa|o processo|a acao)\b/,
     /\b(redija|redigir|escreva|escrever|faca|fazer|elabore|elaborar|monte|montar)\b.{0,25}\b(peticao|contestacao|recurso|peca|procuracao|notificacao extrajudicial)\b/,
     /\bparecer juridico\b/,
-    /\btenho direito\b/,
+    /\btenho direito\b(?!.{0,25}\b(desconto|teste|demonstracao|plano|planos|trial|gratis|api)\b)/,
     /\b(devo|posso|vale a pena) (processar|entrar com|ajuizar|acionar)\b/,
     /\bqual (e )?o meu prazo\b/
   ];
 
-  /**
-   * Travas determinísticas compartilhadas entre o widget (navegador) e o server.js (antes do Gemini).
-   * @returns {{tipo: "injection"|"oab", resposta: string} | null}
-   */
-  function verificarTravas(mensagem) {
-    const norm = normalizar(mensagem);
-    if (!norm.trim()) return null;
-    if (PADROES_INJECTION.some(function (re) { return re.test(norm); })) {
-      return { tipo: "injection", resposta: RESPOSTA_INJECTION };
+  function verificarTravas(mensagemBruta) {
+    const norm = String(mensagemBruta || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    for (let i = 0; i < PADROES_INJECTION.length; i++) {
+      if (PADROES_INJECTION[i].test(norm)) {
+        return {
+          tipo: "injection",
+          resposta: "Solicitação recusada pelas diretrizes de governança da VeraLitis AI (inspiradas na Resolução CNJ nº 615/2025). Não compartilho instruções internas nem altero minhas regras éticas. Posso explicar nossos módulos de triagem ou planos SaaS?"
+        };
+      }
     }
-    if (PADROES_OAB.some(function (re) { return re.test(norm); })) {
-      return { tipo: "oab", resposta: RESPOSTA_OAB };
+    for (let j = 0; j < PADROES_OAB.length; j++) {
+      if (PADROES_OAB[j].test(norm)) {
+        return {
+          tipo: "oab",
+          resposta: "Em respeito ao Estatuto da OAB (Lei nº 8.906/1994), a VeraLitis AI realiza exclusivamente triagem operacional e documental preliminar. Não emitimos orientação jurídica individualizada, juízo sobre êxito processual nem redigimos peças judiciais. Deseja testar a admissibilidade documental no Simulador (§02)?"
+        };
+      }
     }
     return null;
   }
