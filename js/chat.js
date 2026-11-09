@@ -60,8 +60,8 @@
     /\bsystem prompt\b|\bprompt de sistema\b|\bprompt do sistema\b/,
     /\bchave de api\b|\bapi[_ ]?key\b/,
     /\bmodo desenvolvedor\b|\bdeveloper mode\b|\bjailbreak\b/,
-    /\bdan\b/,
-    /\baja como\b/
+    /\bmodo dan\b|\bdo anything now\b/,
+    /\baja como\b|\bfinja (ser|que)\b|\bvoce agora e\b/
   ];
 
   const PADROES_OAB = [
@@ -77,23 +77,20 @@
     /\bqual (e )?o meu prazo\b/
   ];
 
-  function verificarTravas(mensagemBruta) {
-    const norm = String(mensagemBruta || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    for (let i = 0; i < PADROES_INJECTION.length; i++) {
-      if (PADROES_INJECTION[i].test(norm)) {
-        return {
-          tipo: "injection",
-          resposta: "Solicitação recusada pelas diretrizes de governança da VeraLitis AI (inspiradas na Resolução CNJ nº 615/2025). Não compartilho instruções internas nem altero minhas regras éticas. Posso explicar nossos módulos de triagem ou planos SaaS?"
-        };
-      }
+  /**
+   * Travas determinísticas compartilhadas entre o widget (navegador) e o server.js (antes do Gemini).
+   * @returns {{tipo: "injection"|"oab", resposta: string} | null}
+   */
+  function verificarTravas(mensagem) {
+    const norm = String(mensagem || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    if (!norm.trim()) return null;
+    const msgInj = typeof RESPOSTA_INJECTION !== "undefined" ? RESPOSTA_INJECTION : "Solicitação recusada pelas diretrizes de governança da VeraLitis AI (inspiradas na Resolução CNJ nº 615/2025). Não compartilho instruções internas nem altero minhas regras éticas. Posso explicar nossos módulos de triagem ou planos SaaS?";
+    const msgOab = typeof RESPOSTA_OAB !== "undefined" ? RESPOSTA_OAB : "Em respeito ao Estatuto da OAB (Lei nº 8.906/1994), a VeraLitis AI realiza exclusivamente triagem operacional e documental preliminar. Não emitimos juízo de certeza sobre êxito processual, não redigimos peças judiciais nem substituímos a consulta com advogado habilitado. Deseja testar a admissibilidade documental no Simulador (§02)?";
+    if (PADROES_INJECTION.some(function (re) { return re.test(norm); })) {
+      return { tipo: "injection", resposta: msgInj };
     }
-    for (let j = 0; j < PADROES_OAB.length; j++) {
-      if (PADROES_OAB[j].test(norm)) {
-        return {
-          tipo: "oab",
-          resposta: "Em respeito ao Estatuto da OAB (Lei nº 8.906/1994), a VeraLitis AI realiza exclusivamente triagem operacional e documental preliminar. Não emitimos orientação jurídica individualizada, juízo sobre êxito processual nem redigimos peças judiciais. Deseja testar a admissibilidade documental no Simulador (§02)?"
-        };
-      }
+    if (PADROES_OAB.some(function (re) { return re.test(norm); })) {
+      return { tipo: "oab", resposta: msgOab };
     }
     return null;
   }

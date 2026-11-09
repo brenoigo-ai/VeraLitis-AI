@@ -31,11 +31,11 @@ A **VeraLitis AI (Sistema VLT-2026-01)** é uma plataforma LegalTech SaaS de pr�
 
     VeraLitis-AI/
     ├── assets/
-    │   ├── fonts/                 # Fontes WOFF2 auto-hospedadas (Privacy by Design / Zero CDNs)
     │   └── img/
     │       ├── logo-veralitis.svg # Logomarca vetorial autoral (Balança Forense + Monograma VL)
     │       └── fluxo-triagem.svg  # Diagrama vetorial do pipeline de 3 etapas do motor
     ├── css/
+    │   ├── fonts/                 # Fontes WOFF2 auto-hospedadas (Privacy by Design / Zero CDNs)
     │   ├── fonts.css              # Declarações @font-face locais com font-display: swap
     │   └── styles.css             # Design System Editorial Forense (Navy #0B192C & Ouro #C5A059)
     ├── docs/
@@ -81,7 +81,7 @@ Acesse `http://localhost:3000`. O widget da VERA detectará o endpoint `/api/hea
 
     npm test
 
-A suíte `tests/vera.test.cjs` executa 14 baterias de verificação reais sobre `js/scoring.js`, `js/chat.js` e a coerência de preços/normas entre `index.html`, `persona.js` e `js/chat.js`.
+A suíte `tests/vera.test.cjs` executa 23 testes de verificação reais sobre `js/scoring.js`, `js/chat.js` e a coerência de preços/normas entre `index.html`, `persona.js` e `js/chat.js`.
 
 ### 5.2. Roteiro de 5 Prompts para Avaliar a VERA na Interface
 1. **Planos e Preços:** "Quais são os planos e preços?" -> Lista Solo (R$ 190/mês), Escritório Pro (R$ 590/mês) e Corporate (R$ 1.490/mês).
@@ -103,7 +103,7 @@ A suíte `tests/vera.test.cjs` executa 14 baterias de verificação reais sobre 
 - **Front-End & UI Editorial:** HTML5 Semântico (WCAG 2.1 AA), CSS3 Custom Properties, **CSS Grid Layout** (módulos de arquitetura) e **CSS Flexbox** (cards de planos SaaS), fotografia otimizada em **WebP** (`assets/img/hero-editorial.webp`) e fontes auto-hospedadas (`css/fonts/` — zero vazamento de IP para terceiros em conformidade com a LGPD).
 - **Motor de Triagem Determinístico:** JavaScript ES6+ puro e isomórfico (`js/scoring.js`), sem dependências externas, garantindo reprodutibilidade matemática de 0 a 100 pontos.
 - **Back-End & Integração com IA:** Node.js (v20+), Express, SDK oficial `@google/genai` (Google Gemini API) e `dotenv`.
-- **Qualidade & Auditoria:** Suíte de testes unitários automatizados via `node:test` (`tests/vera.test.cjs` com 14 testes cobrindo cálculo de score, prazos prescricionais e travas éticas).
+- **Qualidade & Auditoria:** Suíte de testes unitários automatizados via `node:test` (`tests/vera.test.cjs` com 23 testes cobrindo cálculo de score, prazos prescricionais e travas éticas).
 
 ## ⚙️ Funcionalidades Principais
 
